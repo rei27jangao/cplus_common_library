@@ -1,0 +1,52 @@
+Arguments: 
+  C:\Program Files (x86)\Nodist\v-x64\12.13.1\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js install
+
+PATH: 
+  C:\Users\PH2190~1\AppData\Local\Temp\yarn--1590739116781-0.4522239394121308;C:\Users\ph2190036\Desktop\Myfiles\Portfolio\package\node_modules\.bin;C:\Users\ph2190036\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Program Files (x86)\Nodist\bin\bin;C:\Program Files (x86)\Nodist\v-x64\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files (x86)\Nodist\v-x64\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files (x86)\Nodist\v-x64\12.13.1\node_modules\npm\bin\node-gyp-bin;C:\Users\ph2190036\AppData\Local\Programs\Git\mingw64\bin;C:\Users\ph2190036\AppData\Local\Programs\Git\usr\bin;C:\Users\ph2190036\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files (x86)\Nodist\bin;C:\Program Files (x86)\Yarn\bin;C:\Program Files\MongoDB\Server\4.2\bin;C:\Users\ph2190036\AppData\Local\Microsoft\WindowsApps;C:\Users\ph2190036\AppData\Local\Programs\Git\cmd;C:\Users\ph2190036\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ph2190036\AppData\Local\Yarn\bin;C:\Users\ph2190036\AppData\Local\GitHubDesktop\bin
+
+Yarn version: 
+  1.21.1
+
+Node version: 
+  12.13.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, lstat 'C:\Users\ph2190036\Desktop\Myfiles\Portfolio\package\cplus_common_library\node_modules\react-scripts\node_modules\@babel\plugin-syntax-object-rest-spread'
+
+npm manifest: 
+  {
+    "name": "cplus_common_library-example",
+    "homepage": "https://TCAP.github.io/cplus_common_library",
+    "version": "0.0.0",
+    "private": true,
+    "dependencies": {
+      "react": "link:../node_modules/react",
+      "react-dom": "link:../node_modules/react-dom",
+      "react-scripts": "link:../node_modules/react-scripts",
+      "cplus_common_library": "link:.."
+    },
+    "scripts": {
+      "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
+      "build": "node ../node_modules/react-scripts/bin/react-scripts.js build",
+      "test": "node ../node_modules/react-scripts/bin/react-scripts.js test",
+      "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
+    },
+    "eslintConfig": {
+      "extends": "react-app"
+    },
+    "browserslist": [
+      ">0.2%",
+      "not dead",
+      "not ie <= 11",
+      "not op_mini all"
+    ]
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
