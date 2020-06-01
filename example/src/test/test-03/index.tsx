@@ -1,4 +1,7 @@
 import React from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { TextAreaInput } from 'cplus_common_library'
 
 const TestComponent03: React.FC = () => {
   return (
@@ -9,8 +12,14 @@ const TestComponent03: React.FC = () => {
           fontWeight: 'bold'
         }}
       >
-        Testing Components
+        Testing Components 3
       </h1>
+      <TextAreaInput 
+        name="Description" 
+        placeholder="Input Description" 
+        minLength={3} /* not required */
+        maxLength={10} /* not required */
+      />
     </div>
   )
 }
