@@ -1,31 +1,27 @@
 import React from 'react'
-import { FormComponent, TextField, SubmitButton } from 'cplus_common_library'
+import { TextField } from 'cplus_common_library'
 
 const TestComponent01: React.FC = () => {
-  const initialValues = {
-    firstName: '',
-    lastName: ''
-  }
+  let SampleValue = 'Sample'
   return (
     <div>
-      <h1
-        style={{
-          textAlign: 'center',
-          fontWeight: 'bold'
+      <TextField
+        value={SampleValue}
+        required={true}
+        errors={{
+          empty: 'Please fill out this field',
+          invalid: 'Invlaid'
         }}
-      >
-        Testing Components
-      </h1>
-      <FormComponent
-        propValues={initialValues}
-        onSubmit={(values: any) => {
-          window.alert(JSON.stringify(values))
+        className='nothing'
+        attrs={{
+          placeholder: 'Enter your project name',
+          style: {
+            marginTop: '10px',
+            width: '300px'
+          }
         }}
-      >
-        <TextField name='firstName' required />
-        <TextField name='lastName' required />
-        <SubmitButton text='Go' />
-      </FormComponent>
+      />
+      {SampleValue}
     </div>
   )
 }
