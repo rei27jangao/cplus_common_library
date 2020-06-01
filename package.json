@@ -55,8 +55,8 @@
     "dist"
   ],
   "dependencies": {
-    "@types/yup": "^0.29.1",
-    "formik": "^2.1.4",
-    "yup": "^0.29.1"
+    "@types/reactstrap": "^8.4.2",
+    "bootstrap": "^4.5.0",
+    "reactstrap": "^8.4.1"
   }
 }
