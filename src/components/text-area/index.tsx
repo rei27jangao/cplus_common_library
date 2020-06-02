@@ -1,98 +1,116 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Label, Input } from 'reactstrap'
+import React, { useState, useEffect } from 'react'
+import { Input, Label } from 'reactstrap'
 
-export type InputTypes = {
-  value: any
-  isValidValue: boolean
-  errorMessage: any
+export type TextAreaInputProps = {
+  name?: any
+  value?: any
+  required?: boolean
+  minLength?: number | 0
+  maxLength?: number | 2000
+  className: string
+  errors?: {
+    empty?: string
+    invalid?: string
+  }
+  attrs?: {
+    placeholder?: string
+    style?: any
+  }
 }
 
-export type TextAreaProps = {
-  name: any
-  placeholder: any
-  minLength?: number
-  maxLength?: number
+export const renderErrorMessage = (error: string) => {
+  if (error !== '')
+    return (
+      <p
+        style={{
+          color: 'red'
+        }}
+      >
+        {error}
+      </p>
+    )
+  return ''
 }
 
-export const TextAreaInput: React.FC<TextAreaProps> = ({
+export const TextAreaInput: React.FC<TextAreaInputProps> = ({
   name,
-  placeholder,
+  value,
+  required,
   minLength,
-  maxLength
+  maxLength,
+  className,
+  errors,
+  attrs
 }) => {
-  const [inputs, setInputs] = useState<InputTypes>({
-    value: '',
-    isValidValue: true,
-    errorMessage: ''
-  })
+  const [error, setError] = useState('')
+  useEffect(() => {}, [error])
+  const [targetValue, setTargetValue] = useState(value)
 
-  const handleChange = useCallback((event: any) => {
-    setInputs({
-      value: event.target.value,
-      isValidValue: false,
-      errorMessage: ''
-    })
-    // var textInput = event.target.value
-    if (event.target.value === undefined) {
-      console.log('undefined')
-    }
-  }, [])
-
-  useEffect(() => {
-    handleChange(event)
-  }, [])
-
-  const validateInput = (value: any) => {
-    const alphabet = /^(?! +$)[A-Za-zăâîșțĂÂÎȘȚ -]+$/
-    // const en = /^[A-Za-z0-9]*$/
-    // const ja = /^[a-zA-Z0-9]+$/
-    // const ch = /(\p{Script=Hani})+/gu
-
-    if (value !== null && value === '') {
-      const resetInput = ''
-      return {
-        value: resetInput,
-        isValidValue: false,
-        errorMessage: 'field cannot be empty'
-      }
-    } else if (!alphabet.exec(value)) {
-      return {
-        value: inputs.value,
-        isValidValue: false,
-        errorMessage: 'space only is invalid'
-      }
-    } else {
-      return {
-        isValidValue: true,
-        errorMessage: ''
-      }
-    }
+  const handleChange = (val: any) => {
+    setTargetValue(val.target.value)
   }
 
-  const handleBlur = useCallback(() => {
-    const { value, isValidValue, errorMessage } = validateInput(inputs.value)
-    setInputs({
-      value: value,
-      isValidValue: isValidValue,
-      errorMessage: errorMessage
-    })
-  }, [inputs.value, validateInput])
-  console.log()
+  const handleBlur = () => {
+    if (required === true) {
+      if (targetValue === '') {
+        setError(errors?.empty || 'Please fill out this field')
+        setTargetValue(value)
+      } else {
+        if (minLength !== undefined && minLength > targetValue.length) {
+          setError(`Must be minimum of ${minLength} characters only`)
+        } else if (maxLength !== undefined && maxLength < targetValue.length) {
+          setError(`Must be maximum of ${maxLength} characters only`)
+        } else {
+          setError('')
+        }
+      }
+    } else {
+      setError('')
+    }
+    // function to convert full-width to half-width
+    const toASCII = (chars: any) => {
+      var ascii = ''
+      for (var i = 0, l = chars.length; i < l; i++) {
+        var c = chars[i].charCodeAt(0)
+
+        // make sure we only convert half-full width char
+        if (c >= 0xff00 && c <= 0xffef) {
+          c = 0xff & (c + 0x20)
+        }
+
+        ascii += String.fromCharCode(c)
+      }
+
+      return ascii
+    }
+    setTargetValue(
+      toASCII(
+        targetValue
+          .replace(/(^\s*)|(\s*$)/gi, '') // removes leading and trailing spaces
+          .replace(/[ ]{2,}/gi, ' ') // replaces multiple spaces with one space
+          .replace(/\n +/, '\n') // Removes spaces after newlines
+      )
+    )
+  }
+
   return (
-    <div>
+    <React.Fragment>
       <Label>
-        {name} &nbsp; /{maxLength}
+        {name} &nbsp; {targetValue.length}/{maxLength}
       </Label>
       <Input
         type='textarea'
-        placeholder={placeholder}
-        value={inputs.value}
-        onChange={handleChange}
+        value={targetValue}
+        required={required}
+        style={attrs?.style}
+        className={className}
+        placeholder={attrs?.placeholder}
+        invalid={error !== ''}
         onBlur={handleBlur}
-        minLength={minLength}
-        maxLength={maxLength}
+        onChange={(val: any) => handleChange(val)}
+        // onKeyDown={handleKeyDown}
       />
-      <span>{inputs.errorMessage}</span>
-    </div>
+      {renderErrorMessage(error)}
+    </React.Fragment>
   )
 }
