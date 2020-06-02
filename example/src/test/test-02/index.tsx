@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import { CountryInput, NumberInput } from 'cplus_common_library'
 
 const TestComponent02: React.FC = () => {
+  const textInput = useRef(null);
   return (
     <div>
       <h1
@@ -14,7 +15,7 @@ const TestComponent02: React.FC = () => {
       </h1>
       <CountryInput
         isRequired={true}
-        // value="JP"
+        value=""
         texts={{
           empty: 'Please fill the required field',
           invalid: 'Invalid country code format.'
@@ -23,12 +24,14 @@ const TestComponent02: React.FC = () => {
           name: 'inputForm',
           title: 'Input Title',
           placeholder: 'Enter a Country code',
-          style: { width: '10%' }
+          style: { width: '12%' }
         }}
+        className="form-control"
+        innerRef={textInput}
       />
       <NumberInput
         isRequired={true}
-        isDecimal={true}
+        isDecimal={false}
         texts={{
           empty: 'Please fill the required field',
           invalid: 'Format incorrect'
@@ -37,9 +40,9 @@ const TestComponent02: React.FC = () => {
           name: 'number01',
           title: 'Input Number',
           placeholder: 'Enter a text',
-          min: 1,
+          min: 5,
           max: 10,
-          style: { width: '10%' }
+          style: { width: '12%' }
         }}
       />
     </div>
