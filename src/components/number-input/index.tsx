@@ -4,35 +4,62 @@ import * as types from './types'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Label, Input } from 'reactstrap';
 
-export const NumberInput: React.FC<types.InputType> = ({isRequired, isDecimal , attrs}) => {
+export const NumberInput: React.FC<types.InputType> = ({isRequired, isDecimal, attrs, texts}) => {
  
 const [textVal, setTextVal] = useState('');
 
-  const [errMessage, setErrMessage] = useState('')
+  const [errMessage, setErrMessage] = useState('');
 
-  console.log(setErrMessage)
   const onChange = (value:any) => {
-    const convert = removeExtraDot(value)
-    setTextVal(convert.toUpperCase());
-  }
-
-  const removeExtraDot = (value:string) => {
-    return value.replace(/\s{2,}/g, '.');
-  }
-
-  const validation = (event:any) => {
+    checkValue(value);
+    const num = value.target.value;
     if(isDecimal) {
-      if (event.keyCode < 48 || event.keyCode > 57 ) {
-        if (event.keyCode !== 8 && event.keyCode !== 110 && event.keyCode !== 190 ) {
-          event.preventDefault();	
-        }
+      const check = num.replace(/[^0-9０-９\..]/g, '');
+      checkValue(check);
+      if(num.charAt(0) === ".") {
+        setTextVal(num.slice(1));
+      } else {
+        setTextVal(check);
+      }
+      const pos = num.indexOf(".") + 1;
+      if(pos > 1) {
+        const twoDecimal = num.indexOf(".") + 3;
+        const num1 = num.substr(0, pos) + num.slice(pos).replace(".", "");
+        setTextVal(num1.substr(0, twoDecimal));
       }
     } else {
-      if (event.keyCode < 48 || event.keyCode > 57 ) {
-        if (event.keyCode !== 8) {
-          event.preventDefault();	
-        }
+      const check = num.replace(/[^0-9０-９]/g, '');
+      checkValue(check);
+      setTextVal(check);
+    }
+  }
+
+  const checkValue = (num:any) => {
+    if (num.length !== 0) {
+      setErrMessage('');
+      if(num > attrs.max || num < attrs.min) {
+        setErrMessage(texts.invalid);
       }
+    } else {
+      setErrMessage(texts.empty);
+    }
+  }
+
+  const toASCII = (chars: any) => {
+    var ascii = ''
+    for (var i = 0, l = chars.length; i < l; i++) {
+      var c = chars[i].charCodeAt(0)
+      if (c >= 0xff00 && c <= 0xffef) {
+        c = 0xff & (c + 0x20)
+      }
+      ascii += String.fromCharCode(c)
+    }
+    const num = parseInt(ascii);
+    if(num > attrs.max || num < attrs.min) {
+      setTextVal('');
+      setErrMessage(texts.invalid);
+    } else {
+      setTextVal(ascii);
     }
   }
 
@@ -46,12 +73,11 @@ const [textVal, setTextVal] = useState('');
         name={attrs.name}
         placeholder={attrs.placeholder}
         style={attrs.style}
-        minLength={attrs.min}
-        maxLength={attrs.max}
-        onChange={(e:any) => onChange(e.target.value)}
-        onKeyDown={validation}
+        onChange={(value:any) => onChange(value)}
+        onBlur={() => toASCII(textVal)}
         invalid={errMessage !== ''}
       />
+      <p className="text-danger">{errMessage}</p>
     </React.Fragment>
   )
 }
