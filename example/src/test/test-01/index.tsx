@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { containerStyles, inputStyles } from './styles'
+import { containerStyles, inputStyles } from '../styles'
 import { TextField, EmailInput } from 'cplus_common_library'
 
 const TestComponent01: React.FC = () => {
