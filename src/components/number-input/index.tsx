@@ -1,47 +1,51 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import * as types from './types'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Label, Input } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Label, Input } from 'reactstrap'
 
-export const NumberInput: React.FC<types.InputType> = ({isRequired, isDecimal, attrs, texts}) => {
- 
-const [textVal, setTextVal] = useState('');
+export const NumberInput: React.FC<types.InputType> = ({
+  isRequired,
+  isDecimal,
+  attrs,
+  texts
+}) => {
+  const [textVal, setTextVal] = useState('')
 
-  const [errMessage, setErrMessage] = useState('');
+  const [errMessage, setErrMessage] = useState('')
 
-  const onChange = (value:any) => {
-    checkValue(value);
-    const num = value.target.value;
-    if(isDecimal) {
-      const check = num.replace(/[^0-9０-９\..]/g, '');
-      checkValue(check);
-      if(num.charAt(0) === ".") {
-        setTextVal(num.slice(1));
+  const onChange = (value: any) => {
+    checkValue(value)
+    const num = value.target.value
+    if (isDecimal) {
+      const check = num.replace(/[^0-9０-９\..]/g, '')
+      checkValue(check)
+      if (num.charAt(0) === '.') {
+        setTextVal(num.slice(1))
       } else {
-        setTextVal(check);
+        setTextVal(check)
       }
-      const pos = num.indexOf(".") + 1;
-      if(pos > 1) {
-        const twoDecimal = num.indexOf(".") + 3;
-        const num1 = num.substr(0, pos) + num.slice(pos).replace(".", "");
-        setTextVal(num1.substr(0, twoDecimal));
+      const pos = num.indexOf('.') + 1
+      if (pos > 1) {
+        const twoDecimal = num.indexOf('.') + 3
+        const num1 = num.substr(0, pos) + num.slice(pos).replace('.', '')
+        setTextVal(num1.substr(0, twoDecimal))
       }
     } else {
-      const check = num.replace(/[^0-9０-９]/g, '');
-      checkValue(check);
-      setTextVal(check);
+      const check = num.replace(/[^0-9０-９]/g, '')
+      checkValue(check)
+      setTextVal(check)
     }
   }
 
-  const checkValue = (num:any) => {
+  const checkValue = (num: any) => {
     if (num.length !== 0) {
-      setErrMessage('');
-      if(num > attrs.max || num < attrs.min) {
-        setErrMessage(texts.invalid);
+      setErrMessage('')
+      if (num > attrs.max || num < attrs.min) {
+        setErrMessage(texts.invalid)
       }
     } else {
-      setErrMessage(texts.empty);
+      setErrMessage(texts.empty)
     }
   }
 
@@ -54,30 +58,32 @@ const [textVal, setTextVal] = useState('');
       }
       ascii += String.fromCharCode(c)
     }
-    const num = parseInt(ascii);
-    if(num > attrs.max || num < attrs.min) {
-      setTextVal('');
-      setErrMessage(texts.invalid);
+    const num = parseInt(ascii)
+    if (num > attrs.max || num < attrs.min) {
+      setTextVal('')
+      setErrMessage(texts.invalid)
     } else {
-      setTextVal(ascii);
+      setTextVal(ascii)
     }
   }
 
   return (
     <React.Fragment>
-      <Label>{attrs.title} <span className="text-danger">*</span></Label>
-      <Input 
-        type="text"
+      <Label>
+        {attrs.title} <span className='text-danger'>*</span>
+      </Label>
+      <Input
+        type='text'
         value={textVal}
         required={isRequired}
         name={attrs.name}
         placeholder={attrs.placeholder}
         style={attrs.style}
-        onChange={(value:any) => onChange(value)}
+        onChange={(value: any) => onChange(value)}
         onBlur={() => toASCII(textVal)}
         invalid={errMessage !== ''}
       />
-      <p className="text-danger">{errMessage}</p>
+      <p className='text-danger'>{errMessage}</p>
     </React.Fragment>
   )
 }

@@ -1,21 +1,14 @@
-import React, {useRef} from 'react'
+import React, { useRef } from 'react'
+import { containerStyles } from '../styles'
 import { CountryInput, NumberInput } from 'cplus_common_library'
 
 const TestComponent02: React.FC = () => {
-  const textInput = useRef(null);
+  const textInput = useRef(null)
   return (
-    <div>
-      <h1
-        style={{
-          textAlign: 'center',
-          fontWeight: 'bold'
-        }}
-      >
-        Testing Components2
-      </h1>
+    <div style={containerStyles}>
       <CountryInput
         isRequired={true}
-        value=""
+        value=''
         texts={{
           empty: 'Please fill the required field',
           invalid: 'Invalid country code format.'
@@ -24,9 +17,9 @@ const TestComponent02: React.FC = () => {
           name: 'inputForm',
           title: 'Input Title',
           placeholder: 'Enter a Country code',
-          style: { width: '12%' }
+          style: { width: '50%' }
         }}
-        className="form-control"
+        className='form-control'
         innerRef={textInput}
       />
       <NumberInput
@@ -42,7 +35,7 @@ const TestComponent02: React.FC = () => {
           placeholder: 'Enter a text',
           min: 5,
           max: 10,
-          style: { width: '12%' }
+          style: { width: '50%' }
         }}
       />
     </div>

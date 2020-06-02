@@ -1,39 +1,52 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import * as types from './types'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Label, Input } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Label, Input } from 'reactstrap'
 
-export const CountryInput: React.FC<types.InputType> = ({isRequired, attrs, texts, value, innerRef, className}) => {
- 
-const [textVal, setTextVal] = useState(value);
+export const CountryInput: React.FC<types.InputType> = ({
+  isRequired,
+  attrs,
+  texts,
+  value,
+  innerRef,
+  className
+}) => {
+  const [textVal, setTextVal] = useState(value)
 
-  const [errMessage, setErrMessage] = useState('');
+  const [errMessage, setErrMessage] = useState('')
 
-  const onChange = (value:any) => {
+  const onChange = (value: any) => {
     const check = value.replace(/[^a-zA-Z0-9０-９Ａ-ｚ]/g, '')
-    checkLength(check);
+    checkLength(check)
     checkFormat(check)
-    setTextVal(check.toUpperCase());
+    setTextVal(check.toUpperCase())
   }
 
-  const checkLength = (val:any) => {
-    if(val.length == 1) {
-      setErrMessage(texts.invalid);
+  const checkLength = (val: any) => {
+    if (val.length == 1) {
+      setErrMessage(texts.invalid)
     } else if (val.length === 0) {
-      setErrMessage(texts.empty);
+      setErrMessage(texts.empty)
     } else {
       setErrMessage('')
     }
   }
 
-  const checkFormat = (val:any) => {
-    const numberExp = /^[0-9]*$/;
-    const numberFullExp = /^[０-９]*$/;
-    const alphaExp = /^[A-Za-z]+$/;
-    const alphaFullExp = /^[Ａ-ｚ]+$/;
-    if(!(val.match(numberExp) || val.match(alphaExp) || val.match(numberFullExp) || val.match(alphaFullExp)  )) {
-      setErrMessage('Invalid country code format.');
+  const checkFormat = (val: any) => {
+    const numberExp = /^[0-9]*$/
+    const numberFullExp = /^[０-９]*$/
+    const alphaExp = /^[A-Za-z]+$/
+    const alphaFullExp = /^[Ａ-ｚ]+$/
+    if (
+      !(
+        val.match(numberExp) ||
+        val.match(alphaExp) ||
+        val.match(numberFullExp) ||
+        val.match(alphaFullExp)
+      )
+    ) {
+      setErrMessage('Invalid country code format.')
     }
   }
 
@@ -46,14 +59,16 @@ const [textVal, setTextVal] = useState(value);
       }
       ascii += String.fromCharCode(c)
     }
-    setTextVal(ascii);
+    setTextVal(ascii)
   }
 
   return (
     <React.Fragment>
-      <Label>{attrs.title} <span className="text-danger">*</span></Label>
-      <Input 
-        type="text"
+      <Label>
+        {attrs.title} <span className='text-danger'>*</span>
+      </Label>
+      <Input
+        type='text'
         value={textVal}
         required={isRequired}
         name={attrs.name}
@@ -61,14 +76,14 @@ const [textVal, setTextVal] = useState(value);
         style={attrs.style}
         minLength={2}
         maxLength={3}
-        onChange={(e:any) => onChange(e.target.value)}
+        onChange={(e: any) => onChange(e.target.value)}
         onBlur={() => toASCII(textVal)}
         invalid={errMessage !== ''}
         innerRef={innerRef}
         className={className}
       />
-      <p className="text-danger">{errMessage}</p>
-      <p className="text-muted">ex: JP or JPN or 392</p>
+      <p className='text-danger'>{errMessage}</p>
+      <p className='text-muted'>ex: JP or JPN or 392</p>
     </React.Fragment>
   )
 }

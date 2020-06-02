@@ -1,85 +1,95 @@
-import React, { useState, useEffect } from 'react'
-import { Input } from 'reactstrap'
+import React, { useState } from 'react'
+import { Input, Label } from 'reactstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import * as types from './types'
-
-export const renderErrorMessage = (error: string) => {
-  if (error !== '')
-    return (
-      <p
-        style={{
-          color: 'red'
-        }}
-      >
-        {error}
-      </p>
-    )
-  return ''
-}
+import { ErrorMessage } from '../common/error-message'
 
 export const TextField: React.FC<types.InputType> = ({
   value,
   required,
   minLength,
   maxLength,
-  className,
   errors,
-  attrs
+  attrs,
+  innerRef,
+  onChange
 }) => {
   const [error, setError] = useState('')
-  useEffect(() => {}, [error])
   const [targetValue, setTargetValue] = useState(value)
+  const [toBeValidate, setToBeValidate] = useState(targetValue)
 
-  const handleChange = (val: any) => {
-    val.preventDefault()
-    setTargetValue(val.target.value)
+  const handleChange = (e: any) => {
+    e.preventDefault()
+    const setNoWhiteSpace = e.target.value
+    setToBeValidate(setNoWhiteSpace.replace(/(^\s*)/gi, ''))
+    onChange(e)
   }
 
-  const handleBlur = () => {
-    if (required === true) {
-      if (targetValue === '') {
-        setError(errors?.empty || 'Please fill out this field')
-        setTargetValue(value)
-      } else {
-        if (minLength !== undefined && minLength > targetValue.length) {
-          setError(`Must be minimum of ${minLength} characters only`)
-        } else if (maxLength !== undefined && maxLength < targetValue.length) {
-          setError(`Must be maximum of ${maxLength} characters only`)
-        } else {
-          setError('')
-        }
-      }
+  const validateLength = () => {
+    if (minLength !== undefined && minLength > toBeValidate.length) {
+      setError(`Must be minimum of ${minLength} characters only`)
+    } else if (maxLength !== undefined && maxLength < toBeValidate.length) {
+      setError(`Must be maximum of ${maxLength} characters only`)
     } else {
       setError('')
     }
-    setTargetValue(
-      targetValue
-        .replace(/(^\s*)|(\s*$)/gi, '') // removes leading and trailing spaces
-        .replace(/[ ]{2,}/gi, ' ') // replaces multiple spaces with one space
-        .replace(/\n +/, '\n') // Removes spaces after newlines
-    )
   }
+
+  const validateRequired = () => {
+    if (required === true) {
+      if (toBeValidate === '') {
+        setError(errors?.empty || `Please enter ${attrs?.title}`)
+        setTargetValue('')
+      } else {
+        validateLength()
+      }
+    } else {
+      validateLength()
+    }
+  }
+
+  const handleBlur = () => {
+    validateRequired()
+    if (error !== '') {
+      setTargetValue(value)
+    } else {
+      setToBeValidate(
+        toBeValidate
+          .replace(/(^\s*)|(\s*$)/gi, '')
+          .replace(/[ ]{2,}/gi, ' ')
+          .replace(/\n +/, '\n')
+      )
+      setTargetValue(toBeValidate)
+    }
+  }
+
+  const renderTextCounter = () => (
+    <React.Fragment>
+      {toBeValidate.length}/{maxLength || 100}
+    </React.Fragment>
+  )
 
   return (
     <React.Fragment>
+      {required && <span>*</span>}
+      <Label>
+        {attrs?.title}: {renderTextCounter()}
+      </Label>
       <Input
-        value={targetValue}
+        type='text'
+        value={toBeValidate}
         required={required}
         style={attrs?.style}
-        className={className}
-        placeholder={attrs?.placeholder}
+        className={attrs?.className}
+        placeholder={attrs?.placeholder || `Enter ${attrs?.title}`}
         invalid={error !== ''}
         onBlur={handleBlur}
         onChange={(val: any) => handleChange(val)}
+        minLength={minLength || 0}
+        maxLength={100}
+        innerRef={error === '' ? innerRef : null}
       />
-      {renderErrorMessage(error)}
-      <button
-        onClick={() => {
-          console.log(targetValue)
-        }}
-      >
-        Check
-      </button>
+      <ErrorMessage error={error} />
     </React.Fragment>
   )
 }

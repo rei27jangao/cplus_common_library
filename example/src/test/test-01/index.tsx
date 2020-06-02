@@ -1,27 +1,52 @@
-import React from 'react'
-import { TextField } from 'cplus_common_library'
+import React, { useRef } from 'react'
+import { containerStyles, inputStyles } from '../styles'
+import { TextField, EmailInput } from 'cplus_common_library'
 
 const TestComponent01: React.FC = () => {
-  let SampleValue = 'Sample'
+  const textFieldRef = useRef<any>(null)
+  const emailInputRef = useRef(null)
+
   return (
-    <div>
-      <TextField
-        value={SampleValue}
-        required={true}
-        errors={{
-          empty: 'Please fill out this field',
-          invalid: 'Invlaid'
-        }}
-        className='nothing'
-        attrs={{
-          placeholder: 'Enter your project name',
-          style: {
-            marginTop: '10px',
-            width: '300px'
-          }
-        }}
-      />
-      {SampleValue}
+    <div style={containerStyles}>
+      <div style={inputStyles}>
+        <TextField
+          value='Sample Value'
+          minLength={10}
+          // required={true}
+          innerRef={textFieldRef}
+          onChange={() => {}}
+          attrs={{
+            title: 'Project Name',
+            placeholder: 'Enter your project name',
+            className: 'nothing',
+            style: {
+              width: '300px',
+              margin: '0'
+            }
+          }}
+        />
+        <button onClick={() => console.log(textFieldRef.current)}>
+          Check Value
+        </button>
+      </div>
+      <div style={inputStyles}>
+        <EmailInput
+          value=''
+          onChange={() => {}}
+          attrs={{
+            placeholder: 'Enter your email',
+            title: 'Email',
+            style: {
+              width: '300px',
+              margin: '0'
+            }
+          }}
+          required
+          minLength={4}
+          maxLength={64}
+          innerRef={emailInputRef}
+        />
+      </div>
     </div>
   )
 }
