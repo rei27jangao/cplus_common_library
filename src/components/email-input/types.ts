@@ -1,9 +1,8 @@
-export type InputType = {
+export type EmailType = {
   value: any
   required?: boolean
   minLength?: number
   maxLength?: number
-  innerRef: any | null
   errors?: {
     empty?: string
     invalid?: string
@@ -14,5 +13,6 @@ export type InputType = {
     style?: any
     className?: string
   }
+  innerRef: any
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
 }
