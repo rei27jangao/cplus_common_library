@@ -1,0 +1,10 @@
+.containerFlex {
+	box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.containerFlex > div {
+	box-sizing: border-box;
+    flex: 0 0 33.33%;
+}
