@@ -1,5 +1,6 @@
 import { TextField } from './components/text-field/'
 import { TextAreaInput } from './components/text-area'
+import { PostalInput } from './components/postal-input'
 import { SelectInput } from './components/select-input'
 import { CountryInput } from './components/country-code'
 import { NumberInput } from './components/number-input'
@@ -13,6 +14,11 @@ export { TextField, EmailInput }
 textArea
 */
 export { TextAreaInput }
+
+/* 
+textArea
+*/
+export { PostalInput }
 
 /* 
 select
