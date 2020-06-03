@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Input, Label } from 'reactstrap'
 
-export type TextAreaInputProps = {
+export type PostalInputProps = {
   name?: any
   value?: any
   required?: boolean
-  minLength?: number | 0
-  maxLength?: number | 2000
+  minLength?: number
+  maxLength?: number
   className?: string
   errors?: {
     empty?: string
@@ -32,15 +32,15 @@ export const renderErrorMessage = (error: string) => {
   return ''
 }
 
-export const TextAreaInput: React.FC<TextAreaInputProps> = ({
+export const PostalInput: React.FC<PostalInputProps> = ({
   name,
   value,
   required,
-  minLength,
-  maxLength,
   className,
-  errors,
-  attrs
+  // errors,
+  attrs,
+  minLength = 3,
+  maxLength = 10
 }) => {
   const [error, setError] = useState('')
   useEffect(() => {}, [error])
@@ -51,19 +51,27 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
   }
 
   const handleBlur = () => {
+    const regexPH = /\d{4}/
+
     if (required === true) {
-      if (targetValue === '') {
-        setError(errors?.empty || 'Please fill out this field')
-        setTargetValue(value)
+      if (regexPH.test(targetValue) === false) {
+        setError(`Invalid postal code.`)
+        console.log('true')
       } else {
-        if (minLength !== undefined && minLength > targetValue.length) {
-          setError(`Must be minimum of ${minLength} characters only`)
-        } else if (maxLength !== undefined && maxLength < targetValue.length) {
-          setError(`Must be maximum of ${maxLength} characters only`)
-        } else {
-          setError('')
-        }
+        setError('')
       }
+      // if (targetValue === '') {
+      //   setError(errors?.empty || 'Please fill out this field')
+      //   setTargetValue(value)
+      // } else {
+      //   if (minLength !== undefined && minLength > targetValue.length) {
+      //     setError(`Must be minimum of ${minLength} characters only`)
+      //   } else if (maxLength !== undefined && maxLength > targetValue.length) {
+      //     setError(`Must be maximum of ${maxLength} characters only`)
+      //   } else {
+      //     setError('')
+      //   }
+      // }
     } else {
       setError('')
     }
@@ -95,11 +103,8 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
 
   return (
     <React.Fragment>
-      <Label>
-        {name} &nbsp; {targetValue.length}/{maxLength}
-      </Label>
+      <Label>{name}</Label>
       <Input
-        type='textarea'
         value={targetValue}
         required={required}
         style={attrs?.style}
@@ -108,6 +113,8 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
         invalid={error !== ''}
         onBlur={handleBlur}
         onChange={(val: any) => handleChange(val)}
+        minLength={minLength}
+        maxLength={maxLength}
         // onKeyDown={handleKeyDown}
       />
       {renderErrorMessage(error)}
