@@ -2,11 +2,33 @@ import React from 'react'
 import { containerStyles } from '../styles'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import { TextAreaInput, SelectInput } from 'cplus_common_library'
+import { TextAreaInput, PostalInput, SelectInput } from 'cplus_common_library'
 
-export const dogOptions = [{ id: 1, label: 'Chihuahua' }]
+
+export const createOption = (label: any) => ({
+  label,
+  value: label.toLowerCase().replace(/\W/g, '')
+})
+
+export const optionFlavours = [
+  createOption('Chocolate')
+];
+
 
 const TestComponent03: React.FC = () => {
+  // const textAreaRef= useRef(null)
+
+  // const handleCreate = (inputValue: any) => {
+  //   const { options } = this.state;
+  //   const newOption = createOption(inputValue);
+  //   console.log(newOption);
+  //   console.groupEnd();
+  //   this.setState({
+  //     options: [...options, newOption],
+  //     value: newOption
+  //   });
+  // };
+
   return (
     <div style={containerStyles}>
       <TextAreaInput
@@ -18,12 +40,33 @@ const TestComponent03: React.FC = () => {
           empty: 'Please fill out this field',
           invalid: 'Format incorrect'
         }}
-        className='nothing'
         attrs={{
           placeholder: 'Enter description'
         }}
+        // innerRef={textAreaRef}
       />
-      <SelectInput /* options={dogOptions} */ />
+      <PostalInput
+        value=''
+        name='Postal Code:'
+        required={true}
+        errors={{
+          empty: 'Please fill out this field',
+          invalid: 'Format incorrect'
+        }}
+        attrs={{
+          placeholder: 'Enter description'
+        }}
+        // innerRef={textAreaRef}
+      />
+      <SelectInput
+        options={optionFlavours}
+        // isMulti
+        isRequired={true}
+        errors={{
+          empty: 'Please fill out this field',
+          invalid: 'Format incorrect'
+        }} 
+      />
     </div>
   )
 }
