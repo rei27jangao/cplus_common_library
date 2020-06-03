@@ -1,18 +1,20 @@
 export type InputType = {
   value: any
+  innerRef: any | null
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
+  valid?: boolean
+  invalid?: boolean
   required?: boolean
   minLength?: number
   maxLength?: number
-  innerRef: any | null
   errors?: {
     empty?: string
     invalid?: string
   }
   attrs?: {
-    placeholder?: string
-    title?: string
+    title: string
+    placeHolder?: string
     style?: any
     className?: string
   }
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
 }

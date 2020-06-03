@@ -6,6 +6,8 @@ import { ErrorMessage } from '../common/error-message'
 
 export const TextField: React.FC<types.InputType> = ({
   value,
+  valid,
+  invalid,
   required,
   minLength,
   maxLength,
@@ -26,9 +28,14 @@ export const TextField: React.FC<types.InputType> = ({
   }
 
   const validateLength = () => {
-    if (minLength !== undefined && minLength > toBeValidate.length) {
+    const fixToBeValidate = toBeValidate
+      .replace(/(^\s*)|(\s*$)/gi, '')
+      .replace(/[ ]{2,}/gi, ' ')
+      .replace(/\n +/, '\n')
+
+    if (minLength !== undefined && minLength > fixToBeValidate.length) {
       setError(`Must be minimum of ${minLength} characters only`)
-    } else if (maxLength !== undefined && maxLength < toBeValidate.length) {
+    } else if (maxLength !== undefined && maxLength < fixToBeValidate.length) {
       setError(`Must be maximum of ${maxLength} characters only`)
     } else {
       setError('')
@@ -48,9 +55,23 @@ export const TextField: React.FC<types.InputType> = ({
     }
   }
 
+  const removeSpaces = () => {
+    const fixTargetValue = value
+      .replace(/(^\s*)|(\s*$)/gi, '')
+      .replace(/[ ]{2,}/gi, ' ')
+      .replace(/\n +/, '\n')
+    const fixToBeValidate = toBeValidate
+      .replace(/(^\s*)|(\s*$)/gi, '')
+      .replace(/[ ]{2,}/gi, ' ')
+      .replace(/\n +/, '\n')
+    setToBeValidate(fixToBeValidate)
+    setTargetValue(fixTargetValue)
+  }
+
   const handleBlur = () => {
     validateRequired()
     if (error !== '') {
+      removeSpaces()
       setTargetValue(value)
     } else {
       setToBeValidate(
@@ -59,7 +80,12 @@ export const TextField: React.FC<types.InputType> = ({
           .replace(/[ ]{2,}/gi, ' ')
           .replace(/\n +/, '\n')
       )
-      setTargetValue(toBeValidate)
+      setTargetValue(
+        toBeValidate
+          .replace(/(^\s*)|(\s*$)/gi, '')
+          .replace(/[ ]{2,}/gi, ' ')
+          .replace(/\n +/, '\n')
+      )
     }
   }
 
@@ -81,13 +107,14 @@ export const TextField: React.FC<types.InputType> = ({
         required={required}
         style={attrs?.style}
         className={attrs?.className}
-        placeholder={attrs?.placeholder || `Enter ${attrs?.title}`}
-        invalid={error !== ''}
+        placeholder={attrs?.placeHolder || `Enter ${attrs?.title || ''}`}
+        invalid={invalid || error !== ''}
         onBlur={handleBlur}
         onChange={(val: any) => handleChange(val)}
         minLength={minLength || 0}
         maxLength={100}
-        innerRef={error === '' ? innerRef : null}
+        innerRef={innerRef}
+        valid={valid}
       />
       <ErrorMessage error={error} />
     </React.Fragment>

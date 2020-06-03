@@ -1,5 +1,9 @@
 export type EmailType = {
   value: any
+  innerRef: any
+  valid?: boolean
+  invalid?: boolean
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
   required?: boolean
   minLength?: number
   maxLength?: number
@@ -8,11 +12,9 @@ export type EmailType = {
     invalid?: string
   }
   attrs?: {
-    placeholder?: string
-    title?: string
+    title: string
+    placeHolder?: string
     style?: any
     className?: string
   }
-  innerRef: any
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
 }
