@@ -7,6 +7,8 @@ import { ErrorMessage } from '../common/error-message'
 
 export const EmailInput: React.FC<types.EmailType> = ({
   value,
+  valid,
+  invalid,
   required,
   minLength,
   maxLength,
@@ -26,12 +28,17 @@ export const EmailInput: React.FC<types.EmailType> = ({
   )
 
   const validateLength = () => {
-    if (minLength !== undefined && minLength > toBeValidate.length) {
+    const fixToBeValidate = toBeValidate
+      .replace(/(^\s*)|(\s*$)/gi, '')
+      .replace(/[ ]{2,}/gi, ' ')
+      .replace(/\n +/, '\n')
+
+    if (minLength !== undefined && minLength > fixToBeValidate.length) {
       setError(`Must be minimum of ${minLength} characters only`)
-    } else if (maxLength !== undefined && maxLength < toBeValidate.length) {
+    } else if (maxLength !== undefined && maxLength < fixToBeValidate.length) {
       setError(`Must be maximum of ${maxLength} characters only`)
     } else {
-      setError('')
+      validateEmail()
     }
   }
 
@@ -42,18 +49,22 @@ export const EmailInput: React.FC<types.EmailType> = ({
         setTargetValue('')
       } else {
         validateLength()
-        validateEmail()
       }
     } else {
       validateLength()
-      validateEmail()
     }
   }
 
   const validateEmail = () => {
+    const fixedEmail = toASCII(
+      toBeValidate
+        .replace(/(^\s*)|(\s*$)/gi, '')
+        .replace(/[ ]{2,}/gi, ' ')
+        .replace(/\n +/, '\n')
+    )
     // eslint-disable-next-line no-control-regex
-    const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i
-    const isValid = expression.test(String(toBeValidate).toLowerCase())
+    const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0]|[a-z\d\u00A0][a-z\d\-._~\u00A0]*[a-z\d\u00A0])\.)+([a-z\u00A0]|[a-z\u00A0][a-z\d\-._~\u00A0]*[a-z\u00A0])\.?$/i
+    const isValid = expression.test(String(fixedEmail).toLowerCase())
     if (!isValid) {
       setError(`${errors?.invalid || 'Invalid format'}`)
       setTargetValue(value)
@@ -61,32 +72,6 @@ export const EmailInput: React.FC<types.EmailType> = ({
       setError('')
     }
   }
-
-  // const validate = () => {
-  //   const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i
-  //   const isValid = expression.test(String(targetValue).toLowerCase())
-  //   if (required === true) {
-  //     if (targetValue === '') {
-  //       setError(errors?.empty || `Please enter ${attrs?.title}`)
-  //       setTargetValue(value)
-  //     } else {
-  //       if (minLength !== undefined && minLength > targetValue.length) {
-  //         setError(`Must be minimum of ${minLength} characters only`)
-  //         setTargetValue(value)
-  //       } else if (maxLength !== undefined && maxLength < targetValue.length) {
-  //         setError(`Must be maximum of ${maxLength} characters only`)
-  //         setTargetValue(value)
-  //       } else if (!isValid) {
-  //         setError(`${errors?.invalid || 'Invalid format'}`)
-  //         setTargetValue(value)
-  //       } else {
-  //         setError('')
-  //       }
-  //     }
-  //   } else {
-  //     setError('')
-  //   }
-  // }
 
   const toASCII = (chars: any) => {
     var ascii = ''
@@ -100,25 +85,57 @@ export const EmailInput: React.FC<types.EmailType> = ({
     return ascii
   }
 
-  const handleBlur = () => {
-    toBeValidate
+  const removeSpaces = () => {
+    const fixTargetValue = value
       .replace(/(^\s*)|(\s*$)/gi, '')
       .replace(/[ ]{2,}/gi, ' ')
       .replace(/\n +/, '\n')
-    targetValue
+    const fixToBeValidate = toBeValidate
       .replace(/(^\s*)|(\s*$)/gi, '')
       .replace(/[ ]{2,}/gi, ' ')
       .replace(/\n +/, '\n')
+    setToBeValidate(fixToBeValidate)
+    setTargetValue(fixTargetValue)
+  }
 
+  const handleBlur = () => {
     validateRequired()
     if (error !== '') {
-      setTargetValue(toASCII(value))
-      setToBeValidate(toASCII(toBeValidate))
+      removeSpaces()
+      setTargetValue(
+        toASCII(
+          value
+            .replace(/(^\s*)|(\s*$)/gi, '')
+            .replace(/[ ]{2,}/gi, ' ')
+            .replace(/\n +/, '\n')
+        )
+      )
+      setToBeValidate(
+        toASCII(
+          toBeValidate
+            .replace(/(^\s*)|(\s*$)/gi, '')
+            .replace(/[ ]{2,}/gi, ' ')
+            .replace(/\n +/, '\n')
+        )
+      )
     } else {
-      setToBeValidate(toASCII(toBeValidate))
-      setTargetValue(toASCII(targetValue))
+      setToBeValidate(
+        toASCII(
+          toBeValidate
+            .replace(/(^\s*)|(\s*$)/gi, '')
+            .replace(/[ ]{2,}/gi, ' ')
+            .replace(/\n +/, '\n')
+        )
+      )
+      setTargetValue(
+        toASCII(
+          targetValue
+            .replace(/(^\s*)|(\s*$)/gi, '')
+            .replace(/[ ]{2,}/gi, ' ')
+            .replace(/\n +/, '\n')
+        )
+      )
     }
-    // validateRequired()
   }
 
   const handleChange = (e: any) => {
@@ -140,13 +157,14 @@ export const EmailInput: React.FC<types.EmailType> = ({
         required={required}
         style={attrs?.style}
         className={attrs?.className}
-        placeholder={attrs?.placeholder || `Enter ${attrs?.title}`}
-        invalid={error !== ''}
+        placeholder={attrs?.placeHolder || `Enter ${attrs?.title || ''}`}
+        invalid={invalid || error !== ''}
         onBlur={handleBlur}
         onChange={(val: any) => handleChange(val)}
         minLength={minLength || 5}
         maxLength={320}
         innerRef={innerRef}
+        valid={valid}
       />
       <ErrorMessage error={error} />
     </React.Fragment>

@@ -4,10 +4,13 @@ import { SelectInput } from './components/select-input'
 import { CountryInput } from './components/country-code'
 import { NumberInput } from './components/number-input'
 import { EmailInput } from './components/email-input'
+import { DateTimeRangePicker } from './components/date-time-range'
 /*
-textField
+TextField
+EmailInput
+DataTimeRangePicker
 */
-export { TextField, EmailInput }
+export { TextField, EmailInput, DateTimeRangePicker }
 
 /* 
 textArea
