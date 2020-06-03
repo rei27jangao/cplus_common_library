@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import * as types from './types'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Label, Input } from 'reactstrap'
+import { RequiredSign } from '../common/required-indication'
 
 export const NumberInput: React.FC<types.InputType> = ({
   isRequired,
@@ -11,15 +11,12 @@ export const NumberInput: React.FC<types.InputType> = ({
   texts
 }) => {
   const [textVal, setTextVal] = useState('')
-
   const [errMessage, setErrMessage] = useState('')
 
   const onChange = (value: any) => {
-    checkValue(value)
-    const num = value.target.value
+    const num = value.target.value;
     if (isDecimal) {
-      const check = num.replace(/[^0-9０-９\..]/g, '')
-      checkValue(check)
+      const check = num.replace(/[^0-9０-９\..]/g, '');
       if (num.charAt(0) === '.') {
         setTextVal(num.slice(1))
       } else {
@@ -29,7 +26,8 @@ export const NumberInput: React.FC<types.InputType> = ({
       if (pos > 1) {
         const twoDecimal = num.indexOf('.') + 3
         const num1 = num.substr(0, pos) + num.slice(pos).replace('.', '')
-        setTextVal(num1.substr(0, twoDecimal))
+        setTextVal(num1.substr(0, twoDecimal));
+        checkValue(num1.substr(0, twoDecimal));
       }
     } else {
       const check = num.replace(/[^0-9０-９]/g, '')
@@ -42,7 +40,9 @@ export const NumberInput: React.FC<types.InputType> = ({
     if (num.length !== 0) {
       setErrMessage('')
       if (num > attrs.max || num < attrs.min) {
-        setErrMessage(texts.invalid)
+        setErrMessage(texts.invalid);
+      } else {
+        setErrMessage('');
       }
     } else {
       setErrMessage(texts.empty)
@@ -58,19 +58,20 @@ export const NumberInput: React.FC<types.InputType> = ({
       }
       ascii += String.fromCharCode(c)
     }
-    const num = parseInt(ascii)
+    const num = parseInt(ascii);
     if (num > attrs.max || num < attrs.min) {
       setTextVal('')
-      setErrMessage(texts.invalid)
+      setErrMessage(texts.invalid);
     } else {
-      setTextVal(ascii)
+      setTextVal(ascii);
+      setErrMessage('');
     }
   }
 
   return (
     <React.Fragment>
       <Label>
-        {attrs.title} <span className='text-danger'>*</span>
+        {attrs.title} { isRequired && <RequiredSign />}
       </Label>
       <Input
         type='text'

@@ -4,6 +4,7 @@ import { SelectInput } from './components/select-input'
 import { CountryInput } from './components/country-code'
 import { NumberInput } from './components/number-input'
 import { EmailInput } from './components/email-input'
+import { Dialog } from './components/dialog-box'
 /*
 textField
 */
@@ -28,3 +29,8 @@ export { CountryInput }
 numberInput
 */
 export { NumberInput }
+
+/*
+dialodBox
+*/
+export { Dialog }

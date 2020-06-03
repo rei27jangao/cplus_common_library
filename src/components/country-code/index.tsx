@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import * as types from './types'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Label, Input } from 'reactstrap'
+import { RequiredSign } from '../common/required-indication'
 
 export const CountryInput: React.FC<types.InputType> = ({
   isRequired,
@@ -65,7 +65,7 @@ export const CountryInput: React.FC<types.InputType> = ({
   return (
     <React.Fragment>
       <Label>
-        {attrs.title} <span className='text-danger'>*</span>
+        {attrs.title} { isRequired && <RequiredSign />}
       </Label>
       <Input
         type='text'
