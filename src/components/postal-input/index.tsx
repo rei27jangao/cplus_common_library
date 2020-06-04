@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Input, Label } from 'reactstrap'
-
-export type PostalInputProps = {
-  name?: any
-  value?: any
-  required?: boolean
-  minLength?: number
-  maxLength?: number
-  className?: string
-  errors?: {
-    empty?: string
-    invalid?: string
-  }
-  attrs?: {
-    placeholder?: string
-    style?: any
-  }
-}
+import * as types from './types'
 
 export const renderErrorMessage = (error: string) => {
   if (error !== '')
@@ -32,12 +16,12 @@ export const renderErrorMessage = (error: string) => {
   return ''
 }
 
-export const PostalInput: React.FC<PostalInputProps> = ({
-  name,
+export const PostalInput: React.FC<types.PostalInputProps> = ({
   value,
-  required,
+  isRequired,
   className,
-  // errors,
+  onChange,
+  texts,
   attrs,
   minLength = 3,
   maxLength = 10
@@ -48,30 +32,34 @@ export const PostalInput: React.FC<PostalInputProps> = ({
 
   const handleChange = (val: any) => {
     setTargetValue(val.target.value)
+    onChange(val)
   }
 
   const handleBlur = () => {
-    const regexPH = /\d{4}/
+    // eslint-disable-next-line no-useless-escape
+    const singleHypenSpace = /^(?=.{1,10}$)([a-zA-Z0-9]+\s{0,1}[a-zA-Z0-9]*\-{0,1}[a-zA-Z0-9]+)$/
+    const latinChar = /^[A-Za-z]+$/
+    const alphaFullExp = /^[Ａ-ｚ]+$/
 
-    if (required === true) {
-      if (regexPH.test(targetValue) === false) {
-        setError(`Invalid postal code.`)
-        console.log('true')
+    if (isRequired) {
+      if (targetValue === '') {
+        setError(texts?.empty || 'Please fill out this field')
+        setTargetValue(value)
+      } else if (
+        !(
+          targetValue.match(singleHypenSpace) ||
+          targetValue.match(latinChar) ||
+          targetValue.match(alphaFullExp)
+        )
+      ) {
+        setError('Invalid postal/zip code format.')
       } else {
-        setError('')
+        if (minLength !== undefined && minLength > targetValue.length) {
+          setError(`Must be minimum of ${minLength} characters only`)
+        } else {
+          setError('')
+        }
       }
-      // if (targetValue === '') {
-      //   setError(errors?.empty || 'Please fill out this field')
-      //   setTargetValue(value)
-      // } else {
-      //   if (minLength !== undefined && minLength > targetValue.length) {
-      //     setError(`Must be minimum of ${minLength} characters only`)
-      //   } else if (maxLength !== undefined && maxLength > targetValue.length) {
-      //     setError(`Must be maximum of ${maxLength} characters only`)
-      //   } else {
-      //     setError('')
-      //   }
-      // }
     } else {
       setError('')
     }
@@ -91,22 +79,15 @@ export const PostalInput: React.FC<PostalInputProps> = ({
 
       return ascii
     }
-    setTargetValue(
-      toASCII(
-        targetValue
-          .replace(/(^\s*)|(\s*$)/gi, '') // removes leading and trailing spaces
-          .replace(/[ ]{2,}/gi, ' ') // replaces multiple spaces with one space
-          .replace(/\n +/, '\n') // Removes spaces after newlines
-      )
-    )
+    setTargetValue(toASCII(targetValue))
   }
 
   return (
     <React.Fragment>
-      <Label>{name}</Label>
+      <Label>{attrs?.title}</Label>
       <Input
         value={targetValue}
-        required={required}
+        isRequired={isRequired}
         style={attrs?.style}
         className={className}
         placeholder={attrs?.placeholder}
