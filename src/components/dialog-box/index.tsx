@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as types from './types'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,20 +10,44 @@ export const Dialog: React.FC<types.DialogType> = ({
   headerText,
   bodyText,
   okText,
-  cancelText,
+  closeText,
   callback,
   toggleDialog,
-  isOpen
+  isOpen,
+  className,
+  headerClassName,
+  bodyClassName,
+  footerClassName,
+  closeButtonClassName,
+  okButtonClassName,
+  hideCloseButton,
+  onOpened,
+  onClosed,
+  innerRef
 }) => {
+  useEffect(() => {
+    isOpen && onOpened()
+  }, [isOpen])
+
   const afterConfirmation = () => {
     toggleDialog()
     callback()
   }
 
+  const onclose = () => {
+    toggleDialog()
+    onClosed()
+  }
+
   return (
     <React.Fragment>
-      <Modal isOpen={isOpen} toggle={toggleDialog}>
-        <ModalHeader toggle={toggleDialog}>
+      <Modal
+        isOpen={isOpen}
+        toggle={toggleDialog}
+        className={className}
+        ref={innerRef}
+      >
+        <ModalHeader toggle={toggleDialog} className={headerClassName}>
           {type === 'success' ? (
             <FontAwesomeIcon icon={fa.faCheck} color='#28C7B1' size='lg' />
           ) : type === 'warning' ? (
@@ -40,25 +64,21 @@ export const Dialog: React.FC<types.DialogType> = ({
             />
           ) : type === 'confirm' ? (
             <FontAwesomeIcon icon={fa.faTasks} color='#6B7376' size='lg' />
+          ) : type === 'info' ? (
+            <FontAwesomeIcon icon={fa.faInfoCircle} color='#6B7376' size='lg' />
           ) : (
             <FontAwesomeIcon icon={fa.faCheck} color='#28C7B1' size='lg' />
           )}{' '}
           {headerText}
         </ModalHeader>
-        <ModalBody>{bodyText}</ModalBody>
-        <ModalFooter>
-          {type === 'warning' ||
-            (type === 'confirm' && (
-              <Button onClick={toggleDialog} color='light'>
-                {cancelText}
-              </Button>
-            ))}
-          <Button
-            onClick={() => afterConfirmation()}
-            color={
-              type === 'warning' || type === 'confirm' ? 'danger' : 'light'
-            }
-          >
+        <ModalBody className={bodyClassName}>{bodyText}</ModalBody>
+        <ModalFooter className={footerClassName}>
+          {!hideCloseButton && (
+            <Button onClick={() => onclose()} color={closeButtonClassName}>
+              {closeText}
+            </Button>
+          )}
+          <Button onClick={() => afterConfirmation()} color={okButtonClassName}>
             {okText}
           </Button>
         </ModalFooter>

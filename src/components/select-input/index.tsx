@@ -1,18 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'
-
-import CreatableSelect from 'react-select'
-
-export type SelectInputProps = {
-  isRequired?: boolean
-  isMulti?: boolean
-  onCreateOption?: any
-  options: any
-  value?: any
-  errors?: {
-    empty?: string
-    invalid?: string
-  }
-}
+import React, { useState, useEffect } from 'react'
+import CreatableSelect from 'react-select/creatable'
+import * as types from './types'
 
 export const renderErrorMessage = (error: string) => {
   if (error !== '')
@@ -28,34 +16,44 @@ export const renderErrorMessage = (error: string) => {
   return ''
 }
 
-export const SelectInput: React.FC<SelectInputProps> = ({
+export const SelectInput: React.FC<types.SelectInputProps> = ({
   isRequired,
   options,
   value,
-  errors,
+  texts,
   isMulti,
-  onCreateOption
+  onChange,
+  classNamePrefix,
+  isClearable,
+  isDisabled,
+  onCreateOption,
+  defaultValue,
+  getOptionLabel,
+  getOptionValue,
+  attrs
 }) => {
   const [selectedOptions, setSelectedOptions] = useState(value)
   const [error, setError] = useState('')
   useEffect(() => {}, [error])
 
-  const handleChange = useCallback((selected: any) => {
-    setSelectedOptions(selected.value)
-  }, [])
+  const handleChange = (selected: any) => {
+    setSelectedOptions(selected)
+    onChange(selected)
+  }
 
   const handleBlur = () => {
-    if (isRequired === true) {
-      if (selectedOptions === 'default') {
-        console.log('true')
-        setError(errors?.empty || 'Please fill out this field')
+    if (isRequired) {
+      if (selectedOptions === null) {
+        // console.log('true')
+        setError(texts?.empty || `Please select ${attrs?.title}`)
         setSelectedOptions(value)
       } else {
-        console.log('false')
+        setError('')
       }
     } else {
       setError('')
     }
+    // console.log(selectedOptions)
   }
 
   return (
@@ -65,14 +63,22 @@ export const SelectInput: React.FC<SelectInputProps> = ({
         isRequired={isRequired}
         options={options}
         value={value}
-        onChange={handleChange}
+        classNamePrefix={classNamePrefix}
+        onChange={(selected: any) => handleChange(selected)}
         onBlur={handleBlur}
         invalid={error !== ''}
         onCreateOption={onCreateOption}
+        defaultValue={defaultValue}
+        isClearable={isClearable}
+        name={attrs?.name}
+        placeholder={attrs?.placeholder}
+        style={attrs?.style}
+        isDisabled={isDisabled}
+        getOptionLabel={getOptionLabel}
+        getOptionValue={getOptionValue}
       />
       {renderErrorMessage(error)}
-      {selectedOptions}
-      {JSON.stringify(options)}
+      {JSON.stringify(selectedOptions)}
     </React.Fragment>
   )
 }
