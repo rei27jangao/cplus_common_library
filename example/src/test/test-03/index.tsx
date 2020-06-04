@@ -4,68 +4,69 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { TextAreaInput, PostalInput, SelectInput } from 'cplus_common_library'
 
-
 export const createOption = (label: any) => ({
   label,
   value: label.toLowerCase().replace(/\W/g, '')
 })
 
 export const optionFlavours = [
-  createOption('Chocolate')
+  createOption('Chocolate'),
+  createOption('Mango')
 ];
 
-
 const TestComponent03: React.FC = () => {
-  // const textAreaRef= useRef(null)
-
-  // const handleCreate = (inputValue: any) => {
-  //   const { options } = this.state;
-  //   const newOption = createOption(inputValue);
-  //   console.log(newOption);
-  //   console.groupEnd();
-  //   this.setState({
-  //     options: [...options, newOption],
-  //     value: newOption
-  //   });
-  // };
-
+  
   return (
     <div style={containerStyles}>
       <TextAreaInput
         value=''
-        name='Description'
-        required={true}
+        isRequired={true}
         maxLength={20}
-        errors={{
+        onChange={() => console.log('TextArea Onchange')}
+        texts={{
           empty: 'Please fill out this field',
           invalid: 'Format incorrect'
         }}
+        minLength={5}
         attrs={{
-          placeholder: 'Enter description'
+          title: 'Description:',
+          placeholder: 'Enter description',
+          style: { width: '100%' }
         }}
-        // innerRef={textAreaRef}
       />
+      <br />
       <PostalInput
         value=''
-        name='Postal Code:'
-        required={true}
-        errors={{
+        isRequired={true}
+        onChange={() => console.log('InputPostal Onchange')}
+        texts={{
           empty: 'Please fill out this field',
           invalid: 'Format incorrect'
         }}
         attrs={{
-          placeholder: 'Enter description'
+          title: 'Country/Zip Code:',
+          placeholder: 'Enter postal/zip code',
+          style: { width: '100%' }
         }}
         // innerRef={textAreaRef}
       />
+      <br />
       <SelectInput
         options={optionFlavours}
-        // isMulti
-        isRequired={true}
-        errors={{
-          empty: 'Please fill out this field',
-          invalid: 'Format incorrect'
-        }} 
+        isMulti
+        isRequired
+        defaultValue={[optionFlavours[0]]}
+        classNamePrefix="samplePrefix"
+        isClearable
+        isDisabled={false}
+        onChange={() => console.log('SelectInput Onchange')}
+        getOptionLabel={(opt:any) => opt.label}
+        getOptionValue={(opt:any) => opt.value}
+        attrs={{
+          title: 'flavor',
+          placeholder: 'Please select flavor',
+          style: { width: '100%' }
+        }}
       />
     </div>
   )

@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Input, Label } from 'reactstrap'
-
-export type TextAreaInputProps = {
-  name?: any
-  value?: any
-  required?: boolean
-  minLength?: number | 0
-  maxLength?: number | 2000
-  className?: string
-  errors?: {
-    empty?: string
-    invalid?: string
-  }
-  attrs?: {
-    placeholder?: string
-    style?: any
-  }
-}
+import * as types from './types'
 
 export const renderErrorMessage = (error: string) => {
   if (error !== '')
@@ -32,15 +16,15 @@ export const renderErrorMessage = (error: string) => {
   return ''
 }
 
-export const TextAreaInput: React.FC<TextAreaInputProps> = ({
-  name,
+export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
   value,
-  required,
+  isRequired,
   minLength,
   maxLength,
   className,
-  errors,
-  attrs
+  texts,
+  attrs,
+  onChange
 }) => {
   const [error, setError] = useState('')
   useEffect(() => {}, [error])
@@ -48,12 +32,13 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
 
   const handleChange = (val: any) => {
     setTargetValue(val.target.value)
+    onChange(val)
   }
 
   const handleBlur = () => {
-    if (required === true) {
+    if (isRequired) {
       if (targetValue === '') {
-        setError(errors?.empty || 'Please fill out this field')
+        setError(texts?.empty || 'Please fill out this field')
         setTargetValue(value)
       } else {
         if (minLength !== undefined && minLength > targetValue.length) {
@@ -96,19 +81,21 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
   return (
     <React.Fragment>
       <Label>
-        {name} &nbsp; {targetValue.length}/{maxLength}
+        {attrs?.title} &nbsp; {targetValue.length}/{maxLength}
       </Label>
       <Input
+        minLength={minLength}
+        maxLength={maxLength}
         type='textarea'
         value={targetValue}
-        required={required}
+        isRequired={isRequired}
+        name={attrs?.name}
+        placeholder={attrs?.placeholder}
         style={attrs?.style}
         className={className}
-        placeholder={attrs?.placeholder}
         invalid={error !== ''}
         onBlur={handleBlur}
         onChange={(val: any) => handleChange(val)}
-        // onKeyDown={handleKeyDown}
       />
       {renderErrorMessage(error)}
     </React.Fragment>
