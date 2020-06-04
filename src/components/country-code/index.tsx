@@ -10,13 +10,17 @@ export const CountryInput: React.FC<types.InputType> = ({
   texts,
   value,
   innerRef,
-  className
+  className,
+  valid,
+  invalid,
+  onChange
 }) => {
   const [textVal, setTextVal] = useState(value)
 
   const [errMessage, setErrMessage] = useState('')
 
-  const onChange = (value: any) => {
+  const onChangeHandler = (value: any) => {
+    onChange();
     const check = value.replace(/[^a-zA-Z0-9０-９Ａ-ｚ]/g, '')
     checkLength(check)
     checkFormat(check)
@@ -46,7 +50,9 @@ export const CountryInput: React.FC<types.InputType> = ({
         val.match(alphaFullExp)
       )
     ) {
-      setErrMessage('Invalid country code format.')
+      setErrMessage(texts.invalid)
+    } else {
+      setErrMessage('');
     }
   }
 
@@ -59,7 +65,24 @@ export const CountryInput: React.FC<types.InputType> = ({
       }
       ascii += String.fromCharCode(c)
     }
-    setTextVal(ascii)
+    const numberExp = /^[0-9]*$/
+    const numberFullExp = /^[０-９]*$/
+    const alphaExp = /^[A-Za-z]+$/
+    const alphaFullExp = /^[Ａ-ｚ]+$/
+    if (
+      !(
+        ascii.match(numberExp) ||
+        ascii.match(alphaExp) ||
+        ascii.match(numberFullExp) ||
+        ascii.match(alphaFullExp)
+      )
+    ) {
+      setTextVal('')
+      setErrMessage(texts.invalid);
+    } else {
+      setErrMessage('');
+      setTextVal(ascii);
+    }
   }
 
   return (
@@ -76,11 +99,11 @@ export const CountryInput: React.FC<types.InputType> = ({
         style={attrs.style}
         minLength={2}
         maxLength={3}
-        onChange={(e: any) => onChange(e.target.value)}
+        onChange={(e: any) => onChangeHandler(e.target.value)}
         onBlur={() => toASCII(textVal)}
         invalid={errMessage !== ''}
         innerRef={innerRef}
-        className={className}
+        className={(valid ? "is-valid " : invalid ? "is-invalid " : "") + className}
       />
       <p className='text-danger'>{errMessage}</p>
       <p className='text-muted'>ex: JP or JPN or 392</p>

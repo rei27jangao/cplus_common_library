@@ -1,18 +1,18 @@
 import React, { useRef, useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { CountryInput, NumberInput, Dialog } from 'cplus_common_library'
 import { Button } from 'reactstrap';
 import { containerStyles } from '../styles'
 
 const TestComponent02: React.FC = () => {
-  const textInput = useRef(null);
-  const afterConfirmation = () => alert("This function will work when user clicks OK in the Dialog");
-  const [modal, setModal] = useState(false);
+  const [dialog, setDialog] = useState(false);
+  const contryInput = useRef(null);
+  const numberInput = useRef(null);
+  const refDialog = useRef(null);
   return (
     <div style={containerStyles}>
       <CountryInput
-        isRequired={true}
-        value=''
+        isRequired
+        value=""
         texts={{
           empty: 'Please fill the required field',
           invalid: 'Invalid country code format.'
@@ -23,12 +23,14 @@ const TestComponent02: React.FC = () => {
           placeholder: 'Enter a Country code',
           style: { width: '50%' }
         }}
-        className='form-control'
-        innerRef={textInput}
+        className=""
+        innerRef={contryInput}
+        onChange={() => console.log("country name change")}
       />
       <NumberInput
-        isRequired={true}
-        isDecimal={true}
+        isRequired
+        value=""
+        isDecimal
         texts={{
           empty: 'Please fill the required field',
           invalid: 'Format incorrect'
@@ -41,19 +43,26 @@ const TestComponent02: React.FC = () => {
           max: 10,
           style: { width: '50%' }
         }}
+        onChange={() => console.log("number change")}
+        innerRef={numberInput}
       />
       <Dialog 
-        innerRef={textInput}
         type="confirm"
         headerText="Confirmation"
         bodyText="Are you sure to proceed?"
         okText="OK"
-        cancelText="CANCEL"
-        callback={() => afterConfirmation()}
-        isOpen={modal}
-        toggleDialog={() => setModal(!modal)}
+        closeText="CANCEL"
+        isOpen={dialog}
+        headerClassName="text-danger"
+        okButtonClassName="primary"
+        closeButtonClassName="danger"
+        toggleDialog={() => setDialog(!dialog)}
+        callback={() => alert("This function will work when user clicks OK")}
+        onOpened={() => console.log("Dialog Open")}
+        onClosed={() => console.log("Dialog Close")}
+        innerRef={refDialog}
       />
-      <Button onClick={() => setModal(!modal)}>Open Dialog</Button>
+      <Button onClick={() => setDialog(!dialog)}>Open Dialog</Button>
     </div>
   )
 }

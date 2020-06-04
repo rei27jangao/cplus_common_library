@@ -8,12 +8,20 @@ export const NumberInput: React.FC<types.InputType> = ({
   isRequired,
   isDecimal,
   attrs,
-  texts
+  texts,
+  value,
+  onChange,
+  decimalPlace,
+  valid,
+  invalid,
+  className,
+  innerRef
 }) => {
-  const [textVal, setTextVal] = useState('')
+  const [textVal, setTextVal] = useState(value)
   const [errMessage, setErrMessage] = useState('')
-
-  const onChange = (value: any) => {
+  const decimalCount = decimalPlace ? decimalPlace + 1 : decimalPlace || 3;
+  const onChangeHandler = (value: any) => {
+    onChange();
     const num = value.target.value;
     if (isDecimal) {
       const check = num.replace(/[^0-9０-９\..]/g, '');
@@ -24,10 +32,10 @@ export const NumberInput: React.FC<types.InputType> = ({
       }
       const pos = num.indexOf('.') + 1
       if (pos > 1) {
-        const twoDecimal = num.indexOf('.') + 3
+        const decimal = num.indexOf('.') + decimalCount;
         const num1 = num.substr(0, pos) + num.slice(pos).replace('.', '')
-        setTextVal(num1.substr(0, twoDecimal));
-        checkValue(num1.substr(0, twoDecimal));
+        setTextVal(num1.substr(0, decimal));
+        checkValue(num1.substr(0, decimal));
       }
     } else {
       const check = num.replace(/[^0-9０-９]/g, '')
@@ -74,15 +82,17 @@ export const NumberInput: React.FC<types.InputType> = ({
         {attrs.title} { isRequired && <RequiredSign />}
       </Label>
       <Input
-        type='text'
+        type="text"
         value={textVal}
         required={isRequired}
         name={attrs.name}
         placeholder={attrs.placeholder}
         style={attrs.style}
-        onChange={(value: any) => onChange(value)}
+        onChange={(value: any) => onChangeHandler(value)}
         onBlur={() => toASCII(textVal)}
         invalid={errMessage !== ''}
+        className={(valid ? "is-valid " : invalid ? "is-invalid " : "") + className}
+        innerRef={innerRef}
       />
       <p className='text-danger'>{errMessage}</p>
     </React.Fragment>
