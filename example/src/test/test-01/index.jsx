@@ -1,13 +1,13 @@
 import React, { useRef } from 'react'
 import { containerStyles, inputStyles } from '../styles'
-import Example from './sample'
 import {
   TextField,
   EmailInput,
   DateTimeRangePicker
 } from 'cplus_common_library'
-const TestComponent01: React.FC = () => {
-  const textFieldRef = useRef<any>(null)
+
+const TestComponent01 = () => {
+  const textFieldRef = useRef(null)
   const emailInputRef = useRef(null)
   const datePickerRef = useRef(null)
   return (
@@ -49,10 +49,9 @@ const TestComponent01: React.FC = () => {
           innerRef={emailInputRef}
         />
       </div>
-
       <div style={containerStyles}>
         <DateTimeRangePicker
-          value={new Date()}
+          value=''
           required={true}
           inputType='input'
           onChange={() => console.log('onChange TimePicker')}
@@ -68,7 +67,7 @@ const TestComponent01: React.FC = () => {
       </div>
       <div style={containerStyles}>
         <DateTimeRangePicker
-          value=''
+          value={new Date()}
           required={true}
           onChange={() => console.log('onChange TimePicker')}
           onSelect={() => console.log('OnSelect TimePicker')}
@@ -106,7 +105,7 @@ const TestComponent01: React.FC = () => {
           onSelect={() => console.log('OnSelect DatePicker')}
           type='datepicker'
           inputType='select'
-          dateFormat='DD/MM/YYYY'
+          dateFormat='MM-DD-YYYY'
           attrs={{
             title: 'DatePicker Select',
             placeholder: 'Please choose Departure Date',
@@ -114,7 +113,6 @@ const TestComponent01: React.FC = () => {
           }}
         />
       </div>
-      <Example />
     </div>
   )
 }

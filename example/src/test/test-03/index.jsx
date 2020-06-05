@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, { useRef } from 'react'
 import { containerStyles } from '../styles'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -10,17 +10,13 @@ export const createOption = (label) => ({
   value: label.toLowerCase().replace(/\W/g, '')
 })
 
-export const optionFlavours = [
-  createOption('Chocolate'),
-  createOption('Mango')
-];
+export const optionFlavours = [createOption('Chocolate'), createOption('Mango')]
 
 const TestComponent03 = () => {
-  
-  const textAreaInput = useRef(null);
-  const postalInput = useRef(null);
-  const selectInput = useRef(null);
-  
+  const textAreaInput = useRef(null)
+  const postalInput = useRef(null)
+  const selectInput = useRef(null)
+
   return (
     <div style={containerStyles}>
       <TextAreaInput
@@ -62,7 +58,7 @@ const TestComponent03 = () => {
         isMulti
         isRequired={true}
         defaultValue={[optionFlavours[0]]}
-        classNamePrefix="samplePrefix"
+        classNamePrefix='samplePrefix'
         isClearable
         isDisabled={false}
         onChange={() => console.log('SelectInput Onchange')}

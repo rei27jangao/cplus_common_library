@@ -6,7 +6,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 import * as types from './types'
 import { ErrorMessage } from '../common/error-message'
 import { RequiredSign } from '../common/required-indication'
-// import { parseISO } from 'date-fns'
 
 export const TimePicker: React.FC<types.TimePickerProps> = ({
   required,
@@ -31,7 +30,6 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
     } else {
       setError('')
     }
-    console.log(startTime)
   }
 
   const handleRawChange = (e: any) => {
@@ -91,15 +89,16 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
         ref={ref}
         onClick={onClick}
         value={value}
-        onChange={() => {}}
+        onChange={validateRequired}
         onBlur={handleBlur}
-        onSelect={onSelect && validateRequired}
+        onSelect={validateRequired && onSelect}
         placeholder={attrs?.placeholder}
         className={
           error !== ''
             ? `border border-danger form-control ${attrs?.className}`
             : `${attrs?.className} form-control`
         }
+        required={required}
       />
     )
   )
@@ -132,6 +131,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
               attrs?.placeholder || `Enter ${attrs?.title || 'Time'}`
             }
             ref={innerRef}
+            required={required}
           />
         ) : (
           <DatePicker
@@ -155,6 +155,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
               attrs?.placeholder || `Enter ${attrs?.title || 'Time'}`
             }
             ref={innerRef}
+            required={required}
           />
         )}
         <p
@@ -187,7 +188,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
                 : attrs?.className
             }
             onBlur={handleBlur}
-            customInput={<DisabledInput />}
+            customInput={customInput || <DisabledInput />}
             onSelect={onSelect}
             onChange={(date: any) => handleChange(date)}
             onChangeRaw={(date: any) => handleRawChange(date.target.value)}
@@ -211,8 +212,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
                 ? `border border-danger ${attrs?.className}`
                 : attrs?.className
             }
-            customInput={<DisabledInput />}
-            // customInputRef={innerRef}
+            customInput={customInput || <DisabledInput />}
             onBlur={handleBlur}
             onSelect={onSelect}
             onChange={(date: any) => handleChange(date)}

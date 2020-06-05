@@ -52,6 +52,7 @@ export const DatePicker: React.FC<types.DatePickerProps> = ({
 
   const validateDDMMYY = (e: any) => {
     const checkDateSlashes = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
+    // eslint-disable-next-line no-useless-escape
     const checkDateDashes = /^([0-2][0-9]|(3)[0-1])(\-)(((0)[0-9])|((1)[0-2]))(\-)\d{4}$/
     const checkTime = checkDateSlashes.test(e) || checkDateDashes.test(e)
 
@@ -99,6 +100,7 @@ export const DatePicker: React.FC<types.DatePickerProps> = ({
   const DisabledInput = React.forwardRef(
     ({ value, onClick, onSelect }: any, ref: any) => (
       <input
+        required={required}
         ref={ref}
         onClick={onClick}
         value={value}
@@ -192,7 +194,7 @@ export const DatePicker: React.FC<types.DatePickerProps> = ({
               attrs?.placeholder || `Enter ${attrs?.title || 'Time'}`
             }
             required={required}
-            customInput={<DisabledInput />}
+            customInput={customInput || <DisabledInput />}
             className={
               error !== ''
                 ? `border border-danger ${attrs?.className}`
@@ -213,7 +215,7 @@ export const DatePicker: React.FC<types.DatePickerProps> = ({
               attrs?.placeholder || `Enter ${attrs?.title || 'Time'}`
             }
             required={required}
-            customInput={<DisabledInput />}
+            customInput={customInput || <DisabledInput />}
             className={
               error !== ''
                 ? `border border-danger ${attrs?.className}`
