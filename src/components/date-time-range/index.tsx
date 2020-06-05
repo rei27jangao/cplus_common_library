@@ -10,15 +10,16 @@ import { DateTimeRangePickerDefault } from './date-time-range-picker'
 export const DateTimeRangePicker: React.FC<types.DateTimeRangePickerProps> = ({
   type,
   timeFormat,
+  dateFormat,
   value,
-  innerRef,
   attrs,
-  errors,
+  texts,
   onChange,
   required,
   customInput,
   inputType,
-  onSelect
+  onSelect,
+  innerRef
 }) => {
   if (type === 'timepicker')
     return (
@@ -26,18 +27,32 @@ export const DateTimeRangePicker: React.FC<types.DateTimeRangePickerProps> = ({
         inputType={inputType}
         onChange={onChange}
         onSelect={onSelect}
-        errors={errors}
+        texts={texts}
         attrs={attrs}
         timeFormat={timeFormat}
         value={value}
-        innerRef={innerRef}
         required={required}
         customInput={customInput}
+        innerRef={innerRef}
       />
     )
-  if (type === 'timerangepicker') return <TimeRangePicker />
-  if (type === 'datepicker') return <DatePicker />
+  if (type === 'datepicker')
+    return (
+      <DatePicker
+        onChange={onChange}
+        onSelect={onSelect}
+        inputType={inputType}
+        value={value}
+        attrs={attrs}
+        texts={texts}
+        dateFormat={dateFormat}
+        required={required}
+        customInput={customInput}
+        innerRef={innerRef}
+      />
+    )
   if (type === 'daterangepicker') return <DateRangePicker />
+  if (type === 'timerangepicker') return <TimeRangePicker />
   if (type === 'datetimepicker') return <DateTimePicker />
   return <DateTimeRangePickerDefault />
 }
