@@ -32,8 +32,7 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
   defaultValue,
   getOptionLabel,
   getOptionValue,
-  attrs,
-  innerRef
+  attrs
 }) => {
   const [selectedOptions, setSelectedOptions] = useState(value)
   const [error, setError] = useState('')
@@ -46,9 +45,9 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
 
   const handleBlur = () => {
     if (isRequired) {
-      if (selectedOptions === null || []) {
+      if (selectedOptions === null) {
         // console.log('true')
-        setError(texts?.empty || 'Please fill out this field')
+        setError(texts?.empty || `Please select ${attrs?.title}`)
         setSelectedOptions(value)
       } else {
         setError('')
@@ -82,9 +81,8 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
         isDisabled={isDisabled}
         getOptionLabel={getOptionLabel}
         getOptionValue={getOptionValue}
-        innerRef={innerRef}
       />
-      <p className='text-danger'>{renderErrorMessage(error)}</p>
+      {JSON.stringify(selectedOptions)}
     </React.Fragment>
   )
 }
