@@ -1,20 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Input, Label } from 'reactstrap'
 import * as types from './types'
-
-export const renderErrorMessage = (error: string) => {
-  if (error !== '')
-    return (
-      <p
-        style={{
-          color: 'red'
-        }}
-      >
-        {error}
-      </p>
-    )
-  return ''
-}
+import { RequiredSign } from '../common/required-indication'
 
 export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
   value,
@@ -24,10 +11,12 @@ export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
   className,
   texts,
   attrs,
-  onChange
+  onChange,
+  valid,
+  invalid,
+  innerRef
 }) => {
-  const [error, setError] = useState('')
-  useEffect(() => {}, [error])
+  const [errMessage, setErrMessage] = useState('')
   const [targetValue, setTargetValue] = useState(value)
 
   const handleChange = (val: any) => {
@@ -38,19 +27,19 @@ export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
   const handleBlur = () => {
     if (isRequired) {
       if (targetValue === '') {
-        setError(texts?.empty || 'Please fill out this field')
+        setErrMessage(texts?.empty || 'Please fill out this field')
         setTargetValue(value)
       } else {
         if (minLength !== undefined && minLength > targetValue.length) {
-          setError(`Must be minimum of ${minLength} characters only`)
+          setErrMessage(`Must be minimum of ${minLength} characters only`)
         } else if (maxLength !== undefined && maxLength < targetValue.length) {
-          setError(`Must be maximum of ${maxLength} characters only`)
+          setErrMessage(`Must be maximum of ${maxLength} characters only`)
         } else {
-          setError('')
+          setErrMessage('')
         }
       }
     } else {
-      setError('')
+      setErrMessage('')
     }
     // function to convert full-width to half-width
     const toASCII = (chars: any) => {
@@ -81,23 +70,26 @@ export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
   return (
     <React.Fragment>
       <Label>
-        {attrs?.title} &nbsp; {targetValue.length}/{maxLength}
+        {attrs?.title} &nbsp; {targetValue.length}/{maxLength} <RequiredSign />
       </Label>
       <Input
         minLength={minLength}
         maxLength={maxLength}
         type='textarea'
         value={targetValue}
-        isRequired={isRequired}
+        required={isRequired}
         name={attrs?.name}
         placeholder={attrs?.placeholder}
         style={attrs?.style}
-        className={className}
-        invalid={error !== ''}
+        invalid={errMessage !== ''}
         onBlur={handleBlur}
         onChange={(val: any) => handleChange(val)}
+        className={
+          (valid ? 'is-valid ' : invalid ? 'is-invalid ' : '') + className
+        }
+        innerRef={innerRef}
       />
-      {renderErrorMessage(error)}
+      <p className='text-danger'>{errMessage}</p>
     </React.Fragment>
   )
 }

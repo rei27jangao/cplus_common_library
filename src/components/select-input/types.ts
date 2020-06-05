@@ -11,6 +11,7 @@ export type SelectInputProps = {
   isDisabled?: boolean
   getOptionLabel?: any
   getOptionValue?: any
+  innerRef: any | null
   texts?: {
     empty?: string
     invalid?: string
