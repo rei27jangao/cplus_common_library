@@ -79,9 +79,11 @@ export const CountryInput: React.FC<types.InputType> = ({
     ) {
       setTextVal('')
       setErrMessage(texts.invalid);
+      checkLength(ascii);
     } else {
       setErrMessage('');
       setTextVal(ascii);
+      checkLength(ascii);
     }
   }
 
