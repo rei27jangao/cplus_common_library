@@ -4,6 +4,7 @@ import { Input, Label } from 'reactstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import * as types from './types'
 import { ErrorMessage } from '../common/error-message'
+import { RequiredSign } from '../common/required-indication'
 
 export const EmailInput: React.FC<types.EmailType> = ({
   value,
@@ -13,7 +14,7 @@ export const EmailInput: React.FC<types.EmailType> = ({
   minLength,
   maxLength,
   attrs,
-  errors,
+  texts,
   innerRef,
   onChange
 }) => {
@@ -45,7 +46,7 @@ export const EmailInput: React.FC<types.EmailType> = ({
   const validateRequired = () => {
     if (required === true) {
       if (toBeValidate === '') {
-        setError(errors?.empty || `Please enter ${attrs?.title}`)
+        setError(texts?.empty || `Please enter ${attrs?.title}`)
         setTargetValue('')
       } else {
         validateLength()
@@ -66,7 +67,7 @@ export const EmailInput: React.FC<types.EmailType> = ({
     const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0]|[a-z\d\u00A0][a-z\d\-._~\u00A0]*[a-z\d\u00A0])\.)+([a-z\u00A0]|[a-z\u00A0][a-z\d\-._~\u00A0]*[a-z\u00A0])\.?$/i
     const isValid = expression.test(String(fixedEmail).toLowerCase())
     if (!isValid) {
-      setError(`${errors?.invalid || 'Invalid format'}`)
+      setError(`${texts?.invalid || 'Invalid format'}`)
       setTargetValue(value)
     } else {
       setError('')
@@ -147,7 +148,7 @@ export const EmailInput: React.FC<types.EmailType> = ({
 
   return (
     <React.Fragment>
-      {required && <span>*</span>}
+      {required && <RequiredSign />}
       <Label>
         {attrs?.title}: {renderTextCounter()}
       </Label>

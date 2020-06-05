@@ -8,6 +8,7 @@ export const DateRangePicker: React.FC = () => {
 
   return (
     <React.Fragment>
+      <p>Component is still in progress</p>
       <DatePicker
         selected={startDate}
         onChange={(date: any) => setStartDate(date)}

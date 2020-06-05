@@ -1,30 +1,32 @@
 import React, { useState } from 'react'
-import DatePicker from 'react-datepicker'
 import { Label } from 'reactstrap'
+import DatePicker from 'react-datepicker'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { ErrorMessage } from '../common/error-message'
 import 'react-datepicker/dist/react-datepicker.css'
 import * as types from './types'
+import { ErrorMessage } from '../common/error-message'
+import { RequiredSign } from '../common/required-indication'
 
 export const TimePicker: React.FC<types.TimePickerProps> = ({
   required,
   attrs,
   timeFormat,
   value,
-  innerRef,
+  customInput,
+  texts,
+  inputType,
   onChange,
   onSelect,
-  customInput,
-  errors,
-  inputType
+  innerRef
 }) => {
   const [startTime, setStartTime] = useState(value)
   const [error, setError] = useState('')
 
   const validateTime = () => {
     if (startTime === null) {
-      setError(errors?.invalid || `Invalid Format`)
-      setStartTime(startTime)
+      setError(texts?.invalid || `Invalid Format`)
+    } else if (startTime === '') {
+      setError(texts?.empty || `Please enter a valid ${attrs?.title}`)
     } else {
       setError('')
     }
@@ -41,7 +43,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
         setError(`Must be minimum of 0 characters`)
         setStartTime(null)
       } else if (!checkTime) {
-        setError(errors?.invalid || `Invalid Format`)
+        setError(texts?.empty || `Please enter a valid ${attrs?.title}`)
       } else {
         setError('')
       }
@@ -53,7 +55,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
         setError(`Must be minimum of 0 characters`)
         setStartTime(null)
       } else if (!checkTime) {
-        setError(errors?.invalid || `Invalid Format`)
+        setError(texts?.empty || `Please enter a valid ${attrs?.title}`)
       } else {
         setError('')
       }
@@ -63,7 +65,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
   const validateRequired = () => {
     if (required === true) {
       if (startTime === '') {
-        setError(errors?.empty || `Please enter a valid ${attrs?.title}`)
+        setError(texts?.empty || `Please enter a valid ${attrs?.title}`)
       } else {
         validateTime()
       }
@@ -81,26 +83,30 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
     validateRequired()
   }
 
-  const DisabledInput = ({ value, onClick, onSelect }: any) => (
-    <input
-      onClick={onClick}
-      value={value}
-      onChange={() => {}}
-      onBlur={handleBlur}
-      onSelect={onSelect || handleBlur}
-      placeholder={attrs?.placeholder}
-      className={
-        error !== ''
-          ? `border border-danger form-control ${attrs?.className}`
-          : `${attrs?.className} form-control`
-      }
-    />
+  const DisabledInput = React.forwardRef(
+    ({ value, onClick, onSelect }: any, ref: any) => (
+      <input
+        ref={ref}
+        onClick={onClick}
+        value={value}
+        onChange={validateRequired}
+        onBlur={handleBlur}
+        onSelect={validateRequired && onSelect}
+        placeholder={attrs?.placeholder}
+        className={
+          error !== ''
+            ? `border border-danger form-control ${attrs?.className}`
+            : `${attrs?.className} form-control`
+        }
+        required={required}
+      />
+    )
   )
 
   if (inputType === 'input')
     return (
       <React.Fragment>
-        {required && <span>*</span>}
+        {required && <RequiredSign />}
         <Label>{attrs?.title}</Label>
         <br />
         {timeFormat === 'hh:mm' ? (
@@ -118,13 +124,13 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
             }
             onBlur={handleBlur}
             customInput={customInput}
-            customInputRef={innerRef}
-            onSelect={onSelect}
+            onSelect={onSelect && validateRequired}
             onChange={(date: any) => handleChange(date)}
             onChangeRaw={(date: any) => handleRawChange(date.target.value)}
             placeholderText={
               attrs?.placeholder || `Enter ${attrs?.title || 'Time'}`
             }
+            ref={innerRef}
             required={required}
           />
         ) : (
@@ -141,7 +147,6 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
                 : attrs?.className
             }
             customInput={customInput}
-            customInputRef={innerRef}
             onBlur={handleBlur}
             onSelect={onSelect}
             onChange={(date: any) => handleChange(date)}
@@ -149,16 +154,17 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
             placeholderText={
               attrs?.placeholder || `Enter ${attrs?.title || 'Time'}`
             }
+            ref={innerRef}
             required={required}
           />
         )}
         <p
           style={{
-            marginBottom: '1px',
+            marginBottom: '2px',
             fontSize: '11px'
           }}
         >
-          {timeFormat === 'hh:mm' ? 'Format: HH:MM' : 'Format: HH:MM:SS'}
+          {timeFormat === 'hh:mm' ? 'HH:MM' : 'HH:MM:SS'}
         </p>
         <ErrorMessage error={error} />
       </React.Fragment>
@@ -166,7 +172,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
   else {
     return (
       <React.Fragment>
-        {required && <span>*</span>}
+        {required && <RequiredSign />}
         <Label>{attrs?.title}</Label>
         <br />
         {timeFormat === 'hh:mm' ? (
@@ -174,7 +180,6 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
             selected={startTime}
             showTimeSelect
             showTimeSelectOnly
-            timeIntervals={1}
             timeCaption='Time'
             dateFormat='HH:mm'
             className={
@@ -183,8 +188,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
                 : attrs?.className
             }
             onBlur={handleBlur}
-            customInput={<DisabledInput />}
-            customInputRef={innerRef}
+            customInput={customInput || <DisabledInput />}
             onSelect={onSelect}
             onChange={(date: any) => handleChange(date)}
             onChangeRaw={(date: any) => handleRawChange(date.target.value)}
@@ -193,6 +197,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
             }
             isClearable
             required={required}
+            ref={innerRef}
           />
         ) : (
           <DatePicker
@@ -207,8 +212,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
                 ? `border border-danger ${attrs?.className}`
                 : attrs?.className
             }
-            customInput={<DisabledInput />}
-            customInputRef={innerRef}
+            customInput={customInput || <DisabledInput />}
             onBlur={handleBlur}
             onSelect={onSelect}
             onChange={(date: any) => handleChange(date)}
@@ -218,6 +222,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
             }
             isClearable
             required={required}
+            ref={innerRef}
           />
         )}
         <p
@@ -226,7 +231,7 @@ export const TimePicker: React.FC<types.TimePickerProps> = ({
             fontSize: '11px'
           }}
         >
-          {timeFormat === 'hh:mm' ? 'Format: HH:MM' : 'Format: HH:MM:SS'}
+          {timeFormat === 'hh:mm' ? 'HH:MM' : 'HH:MM:SS'}
         </p>
         <ErrorMessage error={error} />
       </React.Fragment>

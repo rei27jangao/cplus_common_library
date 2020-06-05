@@ -3,18 +3,19 @@ import { Input, Label } from 'reactstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import * as types from './types'
 import { ErrorMessage } from '../common/error-message'
+import { RequiredSign } from '../common/required-indication'
 
 export const TextField: React.FC<types.InputType> = ({
   value,
+  innerRef,
+  onChange,
+  attrs,
   valid,
   invalid,
   required,
   minLength,
   maxLength,
-  errors,
-  attrs,
-  innerRef,
-  onChange
+  texts
 }) => {
   const [error, setError] = useState('')
   const [targetValue, setTargetValue] = useState(value)
@@ -45,7 +46,7 @@ export const TextField: React.FC<types.InputType> = ({
   const validateRequired = () => {
     if (required === true) {
       if (toBeValidate === '') {
-        setError(errors?.empty || `Please enter ${attrs?.title}`)
+        setError(texts?.empty || `Please enter ${attrs?.title || ''}`)
         setTargetValue('')
       } else {
         validateLength()
@@ -97,7 +98,7 @@ export const TextField: React.FC<types.InputType> = ({
 
   return (
     <React.Fragment>
-      {required && <span>*</span>}
+      {required && <RequiredSign />}
       <Label>
         {attrs?.title}: {renderTextCounter()}
       </Label>

@@ -5,18 +5,16 @@ import {
   EmailInput,
   DateTimeRangePicker
 } from 'cplus_common_library'
-const TestComponent01: React.FC = () => {
-  const textFieldRef = useRef<any>(null)
+
+const TestComponent01 = () => {
+  const textFieldRef = useRef(null)
   const emailInputRef = useRef(null)
-  const timerPickerRef = useRef(null)
+  const datePickerRef = useRef(null)
   return (
     <div style={containerStyles}>
       <div style={inputStyles}>
         <TextField
           value=''
-          minLength={3}
-          maxLength={6}
-          required={true}
           innerRef={textFieldRef}
           onChange={() => console.log('TextField Onchange')}
           attrs={{
@@ -28,8 +26,10 @@ const TestComponent01: React.FC = () => {
               margin: '0'
             }
           }}
+          minLength={3}
+          maxLength={6}
+          required={true}
         />
-        <button onClick={() => console.log(textFieldRef)}>Check Element</button>
       </div>
       <div style={inputStyles}>
         <EmailInput
@@ -48,50 +48,70 @@ const TestComponent01: React.FC = () => {
           maxLength={64}
           innerRef={emailInputRef}
         />
-        <button onClick={() => console.log(emailInputRef)}>
-          Check Element
-        </button>
       </div>
-
       <div style={containerStyles}>
         <DateTimeRangePicker
           value=''
           required={true}
-          innerRef={timerPickerRef}
           inputType='input'
           onChange={() => console.log('onChange TimePicker')}
           onSelect={() => console.log('OnSelect TimePicker')}
           type='timepicker'
           timeFormat='hh:mm:ss'
           attrs={{
-            title: 'Time In Input',
+            title: 'TimePicker Input',
             placeholder: 'Time-in',
             className: 'form-control'
           }}
         />
-        <button onClick={() => console.log(timerPickerRef)}>
-          Check Element
-        </button>
       </div>
       <div style={containerStyles}>
         <DateTimeRangePicker
-          value=''
+          value={new Date()}
           required={true}
-          innerRef={timerPickerRef}
-          inputType='select'
           onChange={() => console.log('onChange TimePicker')}
           onSelect={() => console.log('OnSelect TimePicker')}
           type='timepicker'
           timeFormat='hh:mm:ss'
           attrs={{
-            title: 'Time In Select',
+            title: 'TimePicker Select',
             placeholder: 'Time-in',
             className: 'form-control'
           }}
+          innerRef={datePickerRef}
         />
-        <button onClick={() => console.log(timerPickerRef)}>
-          Check Element
-        </button>
+      </div>
+      <div style={containerStyles}>
+        <DateTimeRangePicker
+          value={new Date()}
+          required={true}
+          onChange={() => console.log('onChange DatePicker')}
+          onSelect={() => console.log('OnSelect DatePicker')}
+          type='datepicker'
+          inputType='input'
+          dateFormat='DD/MM/YYYY'
+          attrs={{
+            title: 'DatePicker Input',
+            placeholder: 'Enter Arrival Date',
+            className: 'form-control'
+          }}
+        />
+      </div>
+      <div style={containerStyles}>
+        <DateTimeRangePicker
+          value=''
+          required={true}
+          onChange={() => console.log('onChange DatePicker')}
+          onSelect={() => console.log('OnSelect DatePicker')}
+          type='datepicker'
+          inputType='select'
+          dateFormat='MM-DD-YYYY'
+          attrs={{
+            title: 'DatePicker Select',
+            placeholder: 'Please choose Departure Date',
+            className: 'form-control'
+          }}
+        />
       </div>
     </div>
   )

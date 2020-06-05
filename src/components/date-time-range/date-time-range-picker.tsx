@@ -7,6 +7,7 @@ export const DateTimeRangePickerDefault: React.FC = () => {
   const [endDate, setEndDate] = useState(new Date())
   return (
     <React.Fragment>
+      <p>Component is still in progress</p>
       <DatePicker
         selected={startDate}
         onChange={(date: any) => setStartDate(date)}

@@ -70,9 +70,11 @@ export const NumberInput: React.FC<types.InputType> = ({
     if (num > attrs.max || num < attrs.min) {
       setTextVal('')
       setErrMessage(texts.invalid);
+      checkValue(ascii);
     } else {
       setTextVal(ascii);
       setErrMessage('');
+      checkValue(ascii);
     }
   }
 
