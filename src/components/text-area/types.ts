@@ -15,4 +15,7 @@ export type TextAreaInputProps = {
     placeholder?: string
     style?: React.CSSProperties
   }
+  valid?: boolean | undefined;
+  invalid?: boolean | undefined;
+  innerRef: any | null;
 }

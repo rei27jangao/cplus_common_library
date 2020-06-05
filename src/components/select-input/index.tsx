@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import * as types from './types'
+import { Label } from 'reactstrap'
+import { RequiredSign } from '../common/required-indication'
 
 export const renderErrorMessage = (error: string) => {
   if (error !== '')
@@ -30,7 +32,8 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
   defaultValue,
   getOptionLabel,
   getOptionValue,
-  attrs
+  attrs,
+  innerRef
 }) => {
   const [selectedOptions, setSelectedOptions] = useState(value)
   const [error, setError] = useState('')
@@ -43,9 +46,9 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
 
   const handleBlur = () => {
     if (isRequired) {
-      if (selectedOptions === null) {
+      if (selectedOptions === null || []) {
         // console.log('true')
-        setError(texts?.empty || `Please select ${attrs?.title}`)
+        setError(texts?.empty || 'Please fill out this field')
         setSelectedOptions(value)
       } else {
         setError('')
@@ -58,6 +61,9 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
 
   return (
     <React.Fragment>
+      <Label>
+        {attrs?.title} {isRequired && <RequiredSign />}
+      </Label>
       <CreatableSelect
         isMulti={isMulti}
         isRequired={isRequired}
@@ -76,9 +82,9 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
         isDisabled={isDisabled}
         getOptionLabel={getOptionLabel}
         getOptionValue={getOptionValue}
+        innerRef={innerRef}
       />
-      {renderErrorMessage(error)}
-      {JSON.stringify(selectedOptions)}
+      <p className='text-danger'>{renderErrorMessage(error)}</p>
     </React.Fragment>
   )
 }

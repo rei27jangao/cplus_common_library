@@ -1,20 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Input, Label } from 'reactstrap'
 import * as types from './types'
-
-export const renderErrorMessage = (error: string) => {
-  if (error !== '')
-    return (
-      <p
-        style={{
-          color: 'red'
-        }}
-      >
-        {error}
-      </p>
-    )
-  return ''
-}
+import { RequiredSign } from '../common/required-indication'
 
 export const PostalInput: React.FC<types.PostalInputProps> = ({
   value,
@@ -24,10 +11,10 @@ export const PostalInput: React.FC<types.PostalInputProps> = ({
   texts,
   attrs,
   minLength = 3,
-  maxLength = 10
+  maxLength = 10,
+  innerRef
 }) => {
-  const [error, setError] = useState('')
-  useEffect(() => {}, [error])
+  const [errMessage, setErrMessage] = useState('')
   const [targetValue, setTargetValue] = useState(value)
 
   const handleChange = (val: any) => {
@@ -43,7 +30,7 @@ export const PostalInput: React.FC<types.PostalInputProps> = ({
 
     if (isRequired) {
       if (targetValue === '') {
-        setError(texts?.empty || 'Please fill out this field')
+        setErrMessage(texts?.empty || 'Please fill out this field')
         setTargetValue(value)
       } else if (
         !(
@@ -52,16 +39,16 @@ export const PostalInput: React.FC<types.PostalInputProps> = ({
           targetValue.match(alphaFullExp)
         )
       ) {
-        setError('Invalid postal/zip code format.')
+        setErrMessage(texts?.invalid)
       } else {
         if (minLength !== undefined && minLength > targetValue.length) {
-          setError(`Must be minimum of ${minLength} characters only`)
+          setErrMessage(`Must be minimum of ${minLength} characters only`)
         } else {
-          setError('')
+          setErrMessage('')
         }
       }
     } else {
-      setError('')
+      setErrMessage('')
     }
     // function to convert full-width to half-width
     const toASCII = (chars: any) => {
@@ -84,21 +71,23 @@ export const PostalInput: React.FC<types.PostalInputProps> = ({
 
   return (
     <React.Fragment>
-      <Label>{attrs?.title}</Label>
+      <Label>
+        {attrs?.title} {isRequired && <RequiredSign />}
+      </Label>
       <Input
         value={targetValue}
-        isRequired={isRequired}
+        required={isRequired}
         style={attrs?.style}
         className={className}
         placeholder={attrs?.placeholder}
-        invalid={error !== ''}
+        invalid={errMessage !== ''}
         onBlur={handleBlur}
         onChange={(val: any) => handleChange(val)}
         minLength={minLength}
         maxLength={maxLength}
-        // onKeyDown={handleKeyDown}
+        innerRef={innerRef}
       />
-      {renderErrorMessage(error)}
+      <p className='text-danger'>{errMessage}</p>
     </React.Fragment>
   )
 }
