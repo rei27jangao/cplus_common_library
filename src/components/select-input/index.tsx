@@ -32,7 +32,8 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
   defaultValue,
   getOptionLabel,
   getOptionValue,
-  attrs
+  attrs,
+  innerRef
 }) => {
   const [selectedOptions, setSelectedOptions] = useState(value)
   const [error, setError] = useState('')
@@ -81,8 +82,9 @@ export const SelectInput: React.FC<types.SelectInputProps> = ({
         isDisabled={isDisabled}
         getOptionLabel={getOptionLabel}
         getOptionValue={getOptionValue}
+        innerRef={innerRef}
       />
-      {JSON.stringify(selectedOptions)}
+      <p className='text-danger'>{renderErrorMessage(error)}</p>
     </React.Fragment>
   )
 }
