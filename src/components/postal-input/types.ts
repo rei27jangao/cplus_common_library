@@ -5,9 +5,10 @@ export type PostalInputProps = {
   maxLength?: number
   className?: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
-  texts?: {
-    empty?: string
-    invalid?: string
+  innerRef: any | null
+  texts: {
+    empty: string
+    invalid: string
   }
   attrs?: {
     name?: string

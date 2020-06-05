@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import { containerStyles } from '../styles'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { TextAreaInput, PostalInput, SelectInput } from 'cplus_common_library'
 
-export const createOption = (label: any) => ({
+// Array for SelectInput
+export const createOption = (label) => ({
   label,
   value: label.toLowerCase().replace(/\W/g, '')
 })
@@ -14,13 +15,17 @@ export const optionFlavours = [
   createOption('Mango')
 ];
 
-const TestComponent03: React.FC = () => {
+const TestComponent03 = () => {
+  
+  const textAreaInput = useRef(null);
+  const postalInput = useRef(null);
+  const selectInput = useRef(null);
   
   return (
     <div style={containerStyles}>
       <TextAreaInput
         value=''
-        isRequired={true}
+        isRequired
         maxLength={20}
         onChange={() => console.log('TextArea Onchange')}
         texts={{
@@ -33,6 +38,7 @@ const TestComponent03: React.FC = () => {
           placeholder: 'Enter description',
           style: { width: '100%' }
         }}
+        innerRef={textAreaInput}
       />
       <br />
       <PostalInput
@@ -48,22 +54,23 @@ const TestComponent03: React.FC = () => {
           placeholder: 'Enter postal/zip code',
           style: { width: '100%' }
         }}
-        // innerRef={textAreaRef}
+        innerRef={postalInput}
       />
       <br />
       <SelectInput
         options={optionFlavours}
         isMulti
-        isRequired
+        isRequired={true}
         defaultValue={[optionFlavours[0]]}
         classNamePrefix="samplePrefix"
         isClearable
         isDisabled={false}
         onChange={() => console.log('SelectInput Onchange')}
-        getOptionLabel={(opt:any) => opt.label}
-        getOptionValue={(opt:any) => opt.value}
+        getOptionLabel={(opt) => opt.label}
+        getOptionValue={(opt) => opt.value}
+        innerRef={selectInput}
         attrs={{
-          title: 'flavor',
+          title: 'Select Flavor',
           placeholder: 'Please select flavor',
           style: { width: '100%' }
         }}
