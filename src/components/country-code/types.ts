@@ -15,5 +15,5 @@ export type InputType = {
   valid?: boolean,
   // applied the is-invalid class when true, does nothing when false
   invalid?: boolean,
-  onChange: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
 }

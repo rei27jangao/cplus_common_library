@@ -11,7 +11,7 @@ export type InputType = {
   // used for developer pass in additional attributes e.g. min, max, placeholder, ref etc.
   attrs: { name: string, title: string, placeholder: string, style?: React.CSSProperties, min: number, max: number};
   value?: string;
-  onChange: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
   // default false
   isDecimal?: boolean;
   // default 2
