@@ -18,4 +18,5 @@ export type TextAreaInputProps = {
   valid?: boolean | undefined;
   invalid?: boolean | undefined;
   innerRef: any | null;
+  locale?: any;
 }
