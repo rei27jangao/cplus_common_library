@@ -25,7 +25,7 @@ const TestComponent03 = () => {
         maxLength={20}
         onChange={() => console.log('TextArea Onchange')}
         texts={{
-          empty: 'Please fill out this field',
+          empty: '',
           invalid: 'Format incorrect'
         }}
         minLength={5}
@@ -35,6 +35,7 @@ const TestComponent03 = () => {
           style: { width: '100%' }
         }}
         innerRef={textAreaInput}
+        locale='jp'
       />
       <br />
       <PostalInput

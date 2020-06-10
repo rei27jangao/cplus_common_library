@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Input, Label } from 'reactstrap'
 import * as types from './types'
 import { RequiredSign } from '../common/required-indication'
+import { useTranslation } from 'react-i18next'
+import i18n from '../i18n'
 
 export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
   value,
@@ -14,10 +16,16 @@ export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
   onChange,
   valid,
   invalid,
-  innerRef
+  innerRef,
+  locale
 }) => {
   const [errMessage, setErrMessage] = useState('')
   const [targetValue, setTargetValue] = useState(value)
+  const { t } = useTranslation()
+
+  useEffect(() => {
+    i18n.changeLanguage(locale)
+  }, [])
 
   const handleChange = (val: any) => {
     setTargetValue(val.target.value)
@@ -27,7 +35,7 @@ export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
   const handleBlur = () => {
     if (isRequired) {
       if (targetValue === '') {
-        setErrMessage(texts?.empty || 'Please fill out this field')
+        setErrMessage(texts?.empty || t('error_messages.required'))
         setTargetValue(value)
       } else {
         if (minLength !== undefined && minLength > targetValue.length) {
@@ -88,6 +96,7 @@ export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
           (valid ? 'is-valid ' : invalid ? 'is-invalid ' : '') + className
         }
         innerRef={innerRef}
+        locale={locale}
       />
       <p className='text-danger'>{errMessage}</p>
     </React.Fragment>
