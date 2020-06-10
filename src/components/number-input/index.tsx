@@ -21,7 +21,7 @@ export const NumberInput: React.FC<types.InputType> = ({
   const [errMessage, setErrMessage] = useState('')
   const decimalCount = decimalPlace ? decimalPlace + 1 : decimalPlace || 3;
   const onChangeHandler = (value: any) => {
-    onChange();
+    onChange(value);
     const num = value.target.value;
     if (isDecimal) {
       const check = num.replace(/[^0-9０-９\..]/g, '');

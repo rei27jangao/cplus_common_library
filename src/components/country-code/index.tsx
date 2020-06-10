@@ -20,7 +20,7 @@ export const CountryInput: React.FC<types.InputType> = ({
   const [errMessage, setErrMessage] = useState('')
 
   const onChangeHandler = (value: any) => {
-    onChange();
+    onChange(value);
     const check = value.replace(/[^a-zA-Z0-9０-９Ａ-ｚ]/g, '')
     checkLength(check)
     checkFormat(check)
