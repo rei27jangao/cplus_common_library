@@ -7,7 +7,6 @@ import { NumberInput } from './components/number-input'
 import { EmailInput } from './components/email-input'
 import { DateTimeRangePicker } from './components/date-time-range'
 import { Dialog } from './components/dialog-box'
-import { toHalfWidth } from './utils/toHalfWidthConverter'
 /*
 TextField
 EmailInput
@@ -44,8 +43,3 @@ export { NumberInput }
 dialodBox
 */
 export { Dialog }
-
-/*
-halfwidthConverter
-*/
-export { toHalfWidth }

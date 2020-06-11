@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { CountryInput, NumberInput, Dialog } from 'cplus_common_library'
-import { Button } from 'reactstrap'
+import { Button, Label } from 'reactstrap'
 import { containerStyles } from '../styles'
 
 const TestComponent02 = () => {
@@ -10,6 +10,7 @@ const TestComponent02 = () => {
   const refDialog = useRef(null)
   return (
     <div style={containerStyles}>
+      <Label>Country Code</Label>
       <CountryInput
         isRequired
         value=''
@@ -17,35 +18,40 @@ const TestComponent02 = () => {
           empty: 'Please fill the required field',
           invalid: 'Invalid country code format.'
         }}
-        attrs={{
+        innerProps={{
           name: 'inputForm',
           title: 'Country Code',
           placeholder: 'Enter a Country code',
-          style: { width: '50%' }
         }}
+        inputInlineStyle={{width: '50%'}}
         className=''
         innerRef={contryInput}
+        minLength={2}
+        maxLength={3}
         onChange={() => console.log('country name change')}
       />
+      <Label>Input Number</Label>
       <NumberInput
         isRequired
         value=''
-        isDecimal
+        isDecimal={true}
+        decimalPlace={3}
+        min={5}
+        max={10}
         texts={{
           empty: 'Please fill the required field',
           invalid: 'Format incorrect'
         }}
-        attrs={{
+        innerProps={{
           name: 'number',
           title: 'Input Number',
-          placeholder: 'Enter a number',
-          min: 5,
-          max: 10,
-          style: { width: '50%' }
+          placeholder: 'Enter a number'
         }}
+        inputInlineStyle={{ width: '50%' }}
         onChange={() => console.log('number change')}
         innerRef={numberInput}
       />
+      <br />
       <Dialog
         type='confirm'
         headerText='Confirmation'
