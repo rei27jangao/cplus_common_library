@@ -5766,7 +5766,11 @@ i18next-http-backend@^1.0.15:
   dependencies:
     node-fetch "2.6.0"
 
+<<<<<<< HEAD
 i18next@*, i18next@^19.4.5:
+=======
+i18next@^19.4.5:
+>>>>>>> 893396fa26673251a10318a6211a4114570e3b44
   version "19.4.5"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.4.5.tgz#f9ea8bbb48d1ec66bc3436f0bb74a16b11821e11"
   integrity sha512-aLvSsURoupi3x9IndmV6+m3IGhzLzhYv7Gw+//K3ovdliyGcFRV0I1MuddI0Bk/zR7BG1U+kJOjeHFUcUIdEgg==

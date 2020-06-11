@@ -20,38 +20,45 @@ const TestComponent03 = () => {
   return (
     <div style={containerStyles}>
       <TextAreaInput
-        value=''
+        wrapperClassName=''
+        wrapperInlineStyle={{}}
+        inputClassName=''
+        isCounter
         isRequired
+        minLength={5}
         maxLength={20}
+        value=''
         onChange={() => console.log('TextArea Onchange')}
         texts={{
           empty: '',
-          invalid: 'Format incorrect'
         }}
-        minLength={5}
-        attrs={{
-          title: 'Description:',
-          placeholder: 'Enter description',
-          style: { width: '100%' }
+        innerProps={{
+          name: 'text:',
+          title: 'text',
+          rows: '5'
         }}
         innerRef={textAreaInput}
-        locale='jp'
+        locale='en'
       />
       <br />
       <PostalInput
+        wrapperClassName=''
+        wrapperInlineStyle={{}}
+        inputClassName=''
+        isCounter
+        isRequired
         value=''
-        isRequired={true}
-        onChange={() => console.log('InputPostal Onchange')}
+        onChange={() => console.log('TextArea Onchange')}
         texts={{
-          empty: 'Please fill out this field',
-          invalid: 'Format incorrect'
+          empty: '',
         }}
-        attrs={{
-          title: 'Country/Zip Code:',
-          placeholder: 'Enter postal/zip code',
-          style: { width: '100%' }
+        innerProps={{
+          name: 'text:',
+          title: 'text',
+          rows: '5'
         }}
         innerRef={postalInput}
+        locale='a'
       />
       <br />
       <SelectInput
