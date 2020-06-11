@@ -1,21 +1,39 @@
-import React, { useState } from 'react'
-import { Input, Label } from 'reactstrap'
-import * as types from './types'
-import { RequiredSign } from '../common/required-indication'
+import React, { useState, useEffect } from 'react'
+import { Input } from 'reactstrap'
+import { useTranslation } from 'react-i18next'
 
-export const PostalInput: React.FC<types.PostalInputProps> = ({
-  value,
+import { toHalfWidth } from '../../utils/toHalfWidthConverter'
+import { CommonType } from '../../models/models'
+import i18n from '../i18n'
+
+export const PostalInput: React.FC<CommonType<{
+  minLength: number
+  maxLength: number
+  locale?: string
+}>> = ({
+  wrapperClassName,
+  inputClassName,
+  isCounter,
   isRequired,
-  className,
-  onChange,
-  texts,
-  attrs,
+  invalid,
   minLength = 3,
   maxLength = 10,
-  innerRef
+  texts,
+  innerRef,
+  wrapperInlineStyle,
+  inputInlineStyle,
+  value,
+  innerProps,
+  onChange,
+  locale = 'en' || 'jp' || 'tw'
 }) => {
   const [errMessage, setErrMessage] = useState('')
   const [targetValue, setTargetValue] = useState(value)
+  const { t } = useTranslation()
+
+  useEffect(() => {
+    i18n.changeLanguage(locale)
+  }, [])
 
   const handleChange = (val: any) => {
     setTargetValue(val.target.value)
@@ -30,7 +48,7 @@ export const PostalInput: React.FC<types.PostalInputProps> = ({
 
     if (isRequired) {
       if (targetValue === '') {
-        setErrMessage(texts?.empty || 'Please fill out this field')
+        setErrMessage(texts?.empty || t('error_messages.required'))
         setTargetValue(value)
       } else if (
         !(
@@ -43,6 +61,8 @@ export const PostalInput: React.FC<types.PostalInputProps> = ({
       } else {
         if (minLength !== undefined && minLength > targetValue.length) {
           setErrMessage(`Must be minimum of ${minLength} characters only`)
+        } else if (maxLength !== undefined && maxLength < targetValue.length) {
+          setErrMessage(`Must be maximum of ${maxLength} characters only`)
         } else {
           setErrMessage('')
         }
@@ -50,44 +70,31 @@ export const PostalInput: React.FC<types.PostalInputProps> = ({
     } else {
       setErrMessage('')
     }
-    // function to convert full-width to half-width
-    const toASCII = (chars: any) => {
-      var ascii = ''
-      for (var i = 0, l = chars.length; i < l; i++) {
-        var c = chars[i].charCodeAt(0)
 
-        // make sure we only convert half-full width char
-        if (c >= 0xff00 && c <= 0xffef) {
-          c = 0xff & (c + 0x20)
-        }
-
-        ascii += String.fromCharCode(c)
-      }
-
-      return ascii
-    }
-    setTargetValue(toASCII(targetValue))
+    setTargetValue(toHalfWidth(targetValue))
   }
 
   return (
     <React.Fragment>
-      <Label>
-        {attrs?.title} {isRequired && <RequiredSign />}
-      </Label>
-      <Input
-        value={targetValue}
-        required={isRequired}
-        style={attrs?.style}
-        className={className}
-        placeholder={attrs?.placeholder}
-        invalid={errMessage !== ''}
-        onBlur={handleBlur}
-        onChange={(val: any) => handleChange(val)}
-        minLength={minLength}
-        maxLength={maxLength}
-        innerRef={innerRef}
-      />
-      <p className='text-danger'>{errMessage}</p>
+      <div className={wrapperClassName} style={wrapperInlineStyle}>
+        <Input
+          onBlur={handleBlur}
+          className={inputClassName}
+          isCounter={isCounter}
+          required={isRequired}
+          invalid={invalid || errMessage !== ''}
+          minLength={minLength}
+          maxLength={maxLength}
+          text={texts}
+          innerRef={innerRef}
+          {...innerProps}
+          style={inputInlineStyle}
+          value={targetValue}
+          onChange={(val: any) => handleChange(val)}
+          locale={locale}
+        />
+        <p className='text-danger'>{errMessage}</p>
+      </div>
     </React.Fragment>
   )
 }

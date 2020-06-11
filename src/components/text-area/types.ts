@@ -1,22 +1,21 @@
-export type TextAreaInputProps = {
-  value?: any
+export type TextAreaInputTypes = {
+  wrapperClassName?: string
+  inputClassName?: string
+  isCounter?: boolean
   isRequired?: boolean
+  invalid?: boolean | undefined
   minLength?: number | 0
   maxLength?: number | 2000
-  className?: string
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
   texts?: {
+    placeholder?: string | 'Enter Text'
+    validate?: string | 'Please enter text'
     empty?: string
-    invalid?: string
   }
-  attrs?: {
-    name?: string
-    title?: string
-    placeholder?: string
-    style?: React.CSSProperties
-  }
-  valid?: boolean | undefined;
-  invalid?: boolean | undefined;
-  innerRef: any | null;
-  locale?: any;
+  innerRef: any | null
+  wrapperInlineStyle?: {}
+  inputInlineStyle?: {}
+  value?: any
+  innerProps?: {}
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
+  locale?: any
 }
