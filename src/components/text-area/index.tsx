@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from 'react'
-import { Input, Label } from 'reactstrap'
-import * as types from './types'
-import { RequiredSign } from '../common/required-indication'
+import { Input } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
+
+import { toHalfWidth } from '../../utils/toHalfWidthConverter'
+import { CommonType } from '../../models/models'
+import { Counter } from '../common/counter'
 import i18n from '../i18n'
 
-export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
-  value,
+export const TextAreaInput: React.FC<CommonType<{
+  minLength?: number | 0
+  maxLength?: number | 2000
+  locale?: any
+}>> = ({
+  wrapperClassName,
+  inputClassName,
+  isCounter,
   isRequired,
+  invalid,
   minLength,
   maxLength,
-  className,
   texts,
-  attrs,
-  onChange,
-  valid,
-  invalid,
   innerRef,
+  wrapperInlineStyle,
+  inputInlineStyle,
+  value,
+  innerProps,
+  onChange,
   locale
 }) => {
   const [errMessage, setErrMessage] = useState('')
@@ -49,24 +58,9 @@ export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
     } else {
       setErrMessage('')
     }
-    // function to convert full-width to half-width
-    const toASCII = (chars: any) => {
-      var ascii = ''
-      for (var i = 0, l = chars.length; i < l; i++) {
-        var c = chars[i].charCodeAt(0)
 
-        // make sure we only convert half-full width char
-        if (c >= 0xff00 && c <= 0xffef) {
-          c = 0xff & (c + 0x20)
-        }
-
-        ascii += String.fromCharCode(c)
-      }
-
-      return ascii
-    }
     setTargetValue(
-      toASCII(
+      toHalfWidth(
         targetValue
           .replace(/(^\s*)|(\s*$)/gi, '') // removes leading and trailing spaces
           .replace(/[ ]{2,}/gi, ' ') // replaces multiple spaces with one space
@@ -77,28 +71,32 @@ export const TextAreaInput: React.FC<types.TextAreaInputProps> = ({
 
   return (
     <React.Fragment>
-      <Label>
-        {attrs?.title} &nbsp; {targetValue.length}/{maxLength} <RequiredSign />
-      </Label>
-      <Input
-        minLength={minLength}
-        maxLength={maxLength}
-        type='textarea'
-        value={targetValue}
-        required={isRequired}
-        name={attrs?.name}
-        placeholder={attrs?.placeholder}
-        style={attrs?.style}
-        invalid={errMessage !== ''}
-        onBlur={handleBlur}
-        onChange={(val: any) => handleChange(val)}
-        className={
-          (valid ? 'is-valid ' : invalid ? 'is-invalid ' : '') + className
-        }
-        innerRef={innerRef}
-        locale={locale}
-      />
-      <p className='text-danger'>{errMessage}</p>
+      <div className={wrapperClassName} style={wrapperInlineStyle}>
+        <Input
+          type='textarea'
+          onBlur={handleBlur}
+          className={inputClassName}
+          required={isRequired}
+          invalid={invalid || errMessage !== ''}
+          minLength={minLength}
+          maxLength={maxLength}
+          text={texts}
+          innerRef={innerRef}
+          {...innerProps}
+          style={inputInlineStyle}
+          value={targetValue}
+          onChange={(val: any) => handleChange(val)}
+          locale={locale}
+        />
+        {isCounter && (
+          <Counter
+            textDataValue={targetValue.length}
+            maxLengthValue={maxLength || 2000}
+          />
+        )}{' '}
+        &nbsp;
+        <span className='text-danger'>{errMessage}</span>
+      </div>
     </React.Fragment>
   )
 }
