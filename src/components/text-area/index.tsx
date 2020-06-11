@@ -3,7 +3,7 @@ import { Input } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
 
 import { toHalfWidth } from '../../utils/toHalfWidthConverter'
-import { CommonType } from '../../models/models'
+import { CommonType } from '../../models/'
 import { Counter } from '../common/counter'
 import i18n from '../i18n'
 
