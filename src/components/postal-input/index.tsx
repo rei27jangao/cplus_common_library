@@ -3,7 +3,7 @@ import { Input } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
 
 import { toHalfWidth } from '../../utils/toHalfWidthConverter'
-import { CommonType } from '../../models/models'
+import { CommonType } from '../../models/'
 import i18n from '../i18n'
 
 export const PostalInput: React.FC<CommonType<{
@@ -57,7 +57,7 @@ export const PostalInput: React.FC<CommonType<{
           targetValue.match(alphaFullExp)
         )
       ) {
-        setErrMessage(texts?.invalid)
+        setErrMessage(texts?.validate)
       } else {
         if (minLength !== undefined && minLength > targetValue.length) {
           setErrMessage(`Must be minimum of ${minLength} characters only`)
