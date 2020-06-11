@@ -1,173 +1,115 @@
-/* eslint-disable no-useless-escape */
-import React, { useState } from 'react'
-import { Input, Label } from 'reactstrap'
+import React, { useState, useEffect } from 'react'
+import { Input } from 'reactstrap'
+import { useTranslation } from 'react-i18next'
+import i18n from '../i18n'
+import { ErrorMessage } from '../common/error-message'
+import { Counter } from '../common/counter'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import * as types from './types'
-import { ErrorMessage } from '../common/error-message'
-import { RequiredSign } from '../common/required-indication'
+import {
+  noSpaceAtBeginning,
+  noSpaceAtBeginningAndLast,
+  fixDoubleSpacing,
+  fixSpacing,
+  emailInputFormat
+} from '../../utils/regex'
+import { toHalfWidth } from '../../utils/toHalfWidthConverter'
 
-export const EmailInput: React.FC<types.EmailType> = ({
+export const EmailInput: React.FC<types.EmailInputType> = ({
   value,
-  valid,
-  invalid,
-  required,
-  minLength,
-  maxLength,
-  attrs,
   texts,
   innerRef,
-  onChange
+  onChange,
+  innerProps,
+  wrapperClassName,
+  inputClassName,
+  wrapperInlineStyle,
+  inputInlineStyle,
+  isRequired,
+  isCounter,
+  maxLength,
+  minLength,
+  valid,
+  invalid,
+  locale
 }) => {
+  const { t } = useTranslation()
+  const [stateValue, setStateValue] = useState(value)
   const [error, setError] = useState('')
-  const [targetValue, setTargetValue] = useState(value)
-  const [toBeValidate, setToBeValidate] = useState(targetValue)
 
-  const renderTextCounter = () => (
-    <React.Fragment>
-      {toBeValidate.length}/{maxLength || 320}
-    </React.Fragment>
-  )
+  useEffect(() => {
+    i18n.changeLanguage(locale)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const validateLength = () => {
-    const fixToBeValidate = toBeValidate
-      .replace(/(^\s*)|(\s*$)/gi, '')
-      .replace(/[ ]{2,}/gi, ' ')
-      .replace(/\n +/, '\n')
-
-    if (minLength !== undefined && minLength > fixToBeValidate.length) {
-      setError(`Must be minimum of ${minLength} characters only`)
-    } else if (maxLength !== undefined && maxLength < fixToBeValidate.length) {
-      setError(`Must be maximum of ${maxLength} characters only`)
-    } else {
-      validateEmail()
-    }
+  const handleChange = (e: any) => {
+    const inputValue = e.target.value
+    setStateValue(inputValue.replace(noSpaceAtBeginning, ''))
+    onChange(e)
   }
 
-  const validateRequired = () => {
-    if (required === true) {
-      if (toBeValidate === '') {
-        setError(texts?.empty || `Please enter ${attrs?.title}`)
-        setTargetValue('')
-      } else {
-        validateLength()
-      }
-    } else {
-      validateLength()
-    }
-  }
-
-  const validateEmail = () => {
-    const fixedEmail = toASCII(
-      toBeValidate
-        .replace(/(^\s*)|(\s*$)/gi, '')
-        .replace(/[ ]{2,}/gi, ' ')
-        .replace(/\n +/, '\n')
+  const checkEmailFormat = () => {
+    const isValidEmail = emailInputFormat.test(
+      String(stateValue).toLocaleLowerCase()
     )
-    // eslint-disable-next-line no-control-regex
-    const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0]|[a-z\d\u00A0][a-z\d\-._~\u00A0]*[a-z\d\u00A0])\.)+([a-z\u00A0]|[a-z\u00A0][a-z\d\-._~\u00A0]*[a-z\u00A0])\.?$/i
-    const isValid = expression.test(String(fixedEmail).toLowerCase())
-    if (!isValid) {
-      setError(`${texts?.invalid || 'Invalid format'}`)
-      setTargetValue(value)
+    if (!isValidEmail) {
+      setError(`${texts.validate || t('error_messages.invalidEmail')}`)
     } else {
       setError('')
     }
   }
 
-  const toASCII = (chars: any) => {
-    var ascii = ''
-    for (var i = 0, l = chars.length; i < l; i++) {
-      var c = chars[i].charCodeAt(0)
-      if (c >= 0xff00 && c <= 0xffef) {
-        c = 0xff & (c + 0x20)
-      }
-      ascii += String.fromCharCode(c)
+  const checkLength = () => {
+    if (minLength !== undefined && minLength > stateValue.length) {
+      setError(`${t('error_messages.minimum')}${minLength}`)
+    } else {
+      checkEmailFormat()
     }
-    return ascii
   }
 
-  const removeSpaces = () => {
-    const fixTargetValue = value
-      .replace(/(^\s*)|(\s*$)/gi, '')
-      .replace(/[ ]{2,}/gi, ' ')
-      .replace(/\n +/, '\n')
-    const fixToBeValidate = toBeValidate
-      .replace(/(^\s*)|(\s*$)/gi, '')
-      .replace(/[ ]{2,}/gi, ' ')
-      .replace(/\n +/, '\n')
-    setToBeValidate(fixToBeValidate)
-    setTargetValue(fixTargetValue)
+  const checkIfRequired = () => {
+    if (stateValue === '') {
+      setError(texts.empty || t('error_messages.required'))
+    } else {
+      checkLength()
+    }
   }
 
   const handleBlur = () => {
-    validateRequired()
-    if (error !== '') {
-      removeSpaces()
-      setTargetValue(
-        toASCII(
-          value
-            .replace(/(^\s*)|(\s*$)/gi, '')
-            .replace(/[ ]{2,}/gi, ' ')
-            .replace(/\n +/, '\n')
-        )
-      )
-      setToBeValidate(
-        toASCII(
-          toBeValidate
-            .replace(/(^\s*)|(\s*$)/gi, '')
-            .replace(/[ ]{2,}/gi, ' ')
-            .replace(/\n +/, '\n')
-        )
-      )
-    } else {
-      setToBeValidate(
-        toASCII(
-          toBeValidate
-            .replace(/(^\s*)|(\s*$)/gi, '')
-            .replace(/[ ]{2,}/gi, ' ')
-            .replace(/\n +/, '\n')
-        )
-      )
-      setTargetValue(
-        toASCII(
-          targetValue
-            .replace(/(^\s*)|(\s*$)/gi, '')
-            .replace(/[ ]{2,}/gi, ' ')
-            .replace(/\n +/, '\n')
-        )
-      )
-    }
-  }
-
-  const handleChange = (e: any) => {
-    e.preventDefault()
-    const setNoWhiteSpace = e.target.value
-    setToBeValidate(setNoWhiteSpace.replace(/(^\s*)/gi, ''))
-    onChange(e)
+    isRequired && checkIfRequired()
+    const fixedValue = toHalfWidth(
+      stateValue
+        .replace(noSpaceAtBeginningAndLast, '')
+        .replace(fixDoubleSpacing, ' ')
+        .replace(fixSpacing, '\n')
+    )
+    setStateValue(fixedValue)
   }
 
   return (
-    <React.Fragment>
-      {required && <RequiredSign />}
-      <Label>
-        {attrs?.title}: {renderTextCounter()}
-      </Label>
+    <div style={wrapperInlineStyle} className={wrapperClassName}>
+      {isCounter && (
+        <Counter
+          textDataValue={stateValue.length}
+          maxLengthValue={maxLength || 100}
+        />
+      )}
       <Input
-        type='text'
-        value={toBeValidate}
-        required={required}
-        style={attrs?.style}
-        className={attrs?.className}
-        placeholder={attrs?.placeHolder || `Enter ${attrs?.title || ''}`}
-        invalid={invalid || error !== ''}
-        onBlur={handleBlur}
-        onChange={(val: any) => handleChange(val)}
-        minLength={minLength || 5}
-        maxLength={320}
+        value={stateValue}
+        required={isRequired}
         innerRef={innerRef}
+        placeholder={texts?.placeholder}
+        maxLength={maxLength || 320}
+        minLength={minLength || 5}
+        {...innerProps}
+        onChange={(e: any) => handleChange(e)}
+        onBlur={handleBlur}
         valid={valid}
+        invalid={invalid || error !== ''}
+        style={inputInlineStyle}
+        className={inputClassName}
       />
-      <ErrorMessage error={error} />
-    </React.Fragment>
+      {error && <ErrorMessage error={error} />}
+    </div>
   )
 }

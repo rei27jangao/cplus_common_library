@@ -1,123 +1,101 @@
-import React, { useState } from 'react'
-import { Input, Label } from 'reactstrap'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react'
+import { Input } from 'reactstrap'
+import { useTranslation } from 'react-i18next'
+import i18n from '../i18n'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import * as types from './types'
 import { ErrorMessage } from '../common/error-message'
-import { RequiredSign } from '../common/required-indication'
+import { Counter } from '../common/counter'
+import {
+  noSpaceAtBeginning,
+  noSpaceAtBeginningAndLast,
+  fixDoubleSpacing,
+  fixSpacing
+} from '../../utils/regex'
 
-export const TextField: React.FC<types.InputType> = ({
+export const TextField: React.FC<types.TextFieldType> = ({
   value,
+  texts,
   innerRef,
   onChange,
-  attrs,
+  innerProps,
+  wrapperClassName,
+  inputClassName,
+  wrapperInlineStyle,
+  inputInlineStyle,
+  isRequired,
+  isCounter,
+  maxLength,
+  minLength,
   valid,
   invalid,
-  required,
-  minLength,
-  maxLength,
-  texts
+  locale
 }) => {
+  const { t } = useTranslation()
+  const [stateValue, setStateValue] = useState(value)
   const [error, setError] = useState('')
-  const [targetValue, setTargetValue] = useState(value)
-  const [toBeValidate, setToBeValidate] = useState(targetValue)
+
+  useEffect(() => {
+    i18n.changeLanguage(locale)
+  }, [])
 
   const handleChange = (e: any) => {
-    e.preventDefault()
-    const setNoWhiteSpace = e.target.value
-    setToBeValidate(setNoWhiteSpace.replace(/(^\s*)/gi, ''))
+    const inputValue = e.target.value
+    setStateValue(inputValue.replace(noSpaceAtBeginning, ''))
     onChange(e)
   }
 
-  const validateLength = () => {
-    const fixToBeValidate = toBeValidate
-      .replace(/(^\s*)|(\s*$)/gi, '')
-      .replace(/[ ]{2,}/gi, ' ')
-      .replace(/\n +/, '\n')
-
-    if (minLength !== undefined && minLength > fixToBeValidate.length) {
-      setError(`Must be minimum of ${minLength} characters only`)
-    } else if (maxLength !== undefined && maxLength < fixToBeValidate.length) {
-      setError(`Must be maximum of ${maxLength} characters only`)
+  const checkLength = () => {
+    if (minLength !== undefined && minLength > stateValue.length) {
+      setError(`${t('error_messages.minimum')}${minLength}`)
     } else {
       setError('')
     }
   }
 
-  const validateRequired = () => {
-    if (required === true) {
-      if (toBeValidate === '') {
-        setError(texts?.empty || `Please enter ${attrs?.title || ''}`)
-        setTargetValue('')
-      } else {
-        validateLength()
-      }
+  const checkIfRequired = () => {
+    if (stateValue === '') {
+      setError(texts.empty || t('error_messages.required'))
     } else {
-      validateLength()
+      checkLength()
     }
-  }
-
-  const removeSpaces = () => {
-    const fixTargetValue = value
-      .replace(/(^\s*)|(\s*$)/gi, '')
-      .replace(/[ ]{2,}/gi, ' ')
-      .replace(/\n +/, '\n')
-    const fixToBeValidate = toBeValidate
-      .replace(/(^\s*)|(\s*$)/gi, '')
-      .replace(/[ ]{2,}/gi, ' ')
-      .replace(/\n +/, '\n')
-    setToBeValidate(fixToBeValidate)
-    setTargetValue(fixTargetValue)
   }
 
   const handleBlur = () => {
-    validateRequired()
-    if (error !== '') {
-      removeSpaces()
-      setTargetValue(value)
-    } else {
-      setToBeValidate(
-        toBeValidate
-          .replace(/(^\s*)|(\s*$)/gi, '')
-          .replace(/[ ]{2,}/gi, ' ')
-          .replace(/\n +/, '\n')
-      )
-      setTargetValue(
-        toBeValidate
-          .replace(/(^\s*)|(\s*$)/gi, '')
-          .replace(/[ ]{2,}/gi, ' ')
-          .replace(/\n +/, '\n')
-      )
-    }
+    isRequired && checkIfRequired()
+    const fixedValue = stateValue
+      .replace(noSpaceAtBeginningAndLast, '')
+      .replace(fixDoubleSpacing, ' ')
+      .replace(fixSpacing, '\n')
+
+    setStateValue(fixedValue)
   }
 
-  const renderTextCounter = () => (
-    <React.Fragment>
-      {toBeValidate.length}/{maxLength || 100}
-    </React.Fragment>
-  )
-
   return (
-    <React.Fragment>
-      {required && <RequiredSign />}
-      <Label>
-        {attrs?.title}: {renderTextCounter()}
-      </Label>
+    <div style={wrapperInlineStyle} className={wrapperClassName}>
+      {isCounter && (
+        <Counter
+          textDataValue={stateValue.length}
+          maxLengthValue={maxLength || 100}
+        />
+      )}
       <Input
-        type='text'
-        value={toBeValidate}
-        required={required}
-        style={attrs?.style}
-        className={attrs?.className}
-        placeholder={attrs?.placeHolder || `Enter ${attrs?.title || ''}`}
-        invalid={invalid || error !== ''}
-        onBlur={handleBlur}
-        onChange={(val: any) => handleChange(val)}
-        minLength={minLength || 0}
-        maxLength={100}
+        value={stateValue}
+        required={isRequired}
         innerRef={innerRef}
+        placeholder={texts?.placeholder}
+        maxLength={maxLength || 100}
+        minLength={minLength || 0}
+        {...innerProps}
+        onChange={(e: any) => handleChange(e)}
+        onBlur={handleBlur}
         valid={valid}
+        invalid={invalid || error !== ''}
+        style={inputInlineStyle}
+        className={inputClassName}
       />
-      <ErrorMessage error={error} />
-    </React.Fragment>
+      {error && <ErrorMessage error={error} />}
+    </div>
   )
 }

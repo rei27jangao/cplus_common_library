@@ -7,7 +7,7 @@ export const Counter: React.FC<types.CounterType> = ({
 }) => {
   return (
     <span className='text-muted fs-11 text-right'>
-      <span className={textDataValue > maxLengthValue ? 'text-danger' : ''}>
+      <span className={textDataValue >= maxLengthValue ? 'text-danger' : ''}>
         {textDataValue}
       </span>
       /{maxLengthValue}

@@ -1,5 +1,7 @@
 {
-	"error_messages": {
-		"required": "Please fill out this field"
-	}
+  "error_messages": {
+    "required": "Please fill out this field",
+    "minimum": "This field must be minimum of ",
+    "invalidEmail": "Invalid email format"
+  }
 }
