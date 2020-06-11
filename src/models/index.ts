@@ -1,7 +1,7 @@
 type TextType = {
   placeholder?: string | undefined
   empty: string
-  invalid: string
+  validate: string
 }
 
 export type CommonType<T> = {
@@ -9,7 +9,6 @@ export type CommonType<T> = {
   texts: TextType
   innerRef: React.Ref<HTMLInputElement> | any
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined
-
   innerProps?: {}
   valid?: boolean
   invalid?: boolean
@@ -17,8 +16,7 @@ export type CommonType<T> = {
   inputClassName?: string | undefined
   wrapperInlineStyle?: React.CSSProperties | undefined
   inputInlineStyle?: React.CSSProperties | undefined
-
   isRequired?: boolean | undefined
-  validate?: boolean | undefined
   isCounter?: boolean | undefined
+  locale: 'jp' | 'en' | string
 } & T

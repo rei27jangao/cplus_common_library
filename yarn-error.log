@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files (x86)\Nodist\v-x64\12.13.1\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js publish
+  C:\Program Files (x86)\Nodist\v-x64\12.13.1\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-i18next i18next-http-backend @types/i18next-http-backend
 
 PATH: 
   C:\Users\ph2190036\AppData\Local\Programs\Git\mingw64\bin;C:\Users\ph2190036\AppData\Local\Programs\Git\usr\bin;C:\Users\ph2190036\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files (x86)\Nodist\bin;C:\Program Files (x86)\Yarn\bin;C:\Program Files\MongoDB\Server\4.2\bin;C:\Users\ph2190036\AppData\Local\Microsoft\WindowsApps;C:\Users\ph2190036\AppData\Local\Programs\Git\cmd;C:\Users\ph2190036\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ph2190036\AppData\Local\Yarn\bin;C:\Users\ph2190036\AppData\Local\GitHubDesktop\bin
@@ -14,22 +14,22 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: canceled
-      at Interface.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:136925:13)
-      at Interface.emit (events.js:210:5)
-      at Interface._ttyWrite (readline.js:887:16)
-      at ReadStream.onkeypress (readline.js:191:10)
-      at ReadStream.emit (events.js:210:5)
-      at emitKeys (internal/readline/utils.js:433:14)
-      at emitKeys.next (<anonymous>)
-      at ReadStream.onData (readline.js:1153:36)
-      at ReadStream.emit (events.js:210:5)
-      at addChunk (_stream_readable.js:309:12)
+  Error: https://registry.yarnpkg.com/@types%2fi18next-http-backend: Not found
+      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66056:18)
+      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140665:22)
+      at Request.emit (events.js:210:5)
+      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141637:10)
+      at Request.emit (events.js:210:5)
+      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141559:12)
+      at Object.onceWrapper (events.js:299:28)
+      at IncomingMessage.emit (events.js:215:7)
+      at endReadableNT (_stream_readable.js:1184:12)
+      at processTicksAndRejections (internal/process/task_queues.js:80:21)
 
 npm manifest: 
   {
     "name": "cplus_common_library",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "Made with create-react-library",
     "author": "TCAP",
     "license": "MIT",
@@ -84,9 +84,17 @@ npm manifest:
       "dist"
     ],
     "dependencies": {
+      "@fortawesome/fontawesome-svg-core": "^1.2.28",
+      "@fortawesome/free-solid-svg-icons": "^5.13.0",
+      "@fortawesome/react-fontawesome": "^0.1.10",
+      "@types/i18next": "^13.0.0",
+      "@types/react-datepicker": "^2.11.0",
       "@types/react-select": "^3.0.13",
       "@types/reactstrap": "^8.4.2",
       "bootstrap": "^4.5.0",
+      "date-fns": "^2.14.0",
+      "i18next": "^19.4.5",
+      "react-datepicker": "^2.16.0",
       "react-select": "^3.1.0",
       "reactstrap": "^8.4.1"
     }
@@ -1207,7 +1215,7 @@ Lockfile:
     dependencies:
       regenerator-runtime "^0.13.4"
   
-  "@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
+  "@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
     version "7.10.2"
     resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.10.2.tgz#d103f21f2602497d38348a32e008637d506db839"
     integrity sha512-6sF3uQw2ivImfVIl62RZ7MXhO2tap69WeWK57vAaimT6AZbE4FbqjdEJIN1UqoD6wI6B+1n9UiagafH1sxjOtg==
@@ -1341,6 +1349,32 @@ Lockfile:
     version "0.2.5"
     resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
     integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
+  
+  "@fortawesome/fontawesome-common-types@^0.2.28":
+    version "0.2.28"
+    resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.28.tgz#1091bdfe63b3f139441e9cba27aa022bff97d8b2"
+    integrity sha512-gtis2/5yLdfI6n0ia0jH7NJs5i/Z/8M/ZbQL6jXQhCthEOe5Cr5NcQPhgTvFxNOtURE03/ZqUcEskdn2M+QaBg==
+  
+  "@fortawesome/fontawesome-svg-core@^1.2.28":
+    version "1.2.28"
+    resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.28.tgz#e5b8c8814ef375f01f5d7c132d3c3a2f83a3abf9"
+    integrity sha512-4LeaNHWvrneoU0i8b5RTOJHKx7E+y7jYejplR7uSVB34+mp3Veg7cbKk7NBCLiI4TyoWS1wh9ZdoyLJR8wSAdg==
+    dependencies:
+      "@fortawesome/fontawesome-common-types" "^0.2.28"
+  
+  "@fortawesome/free-solid-svg-icons@^5.13.0":
+    version "5.13.0"
+    resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.13.0.tgz#44d9118668ad96b4fd5c9434a43efc5903525739"
+    integrity sha512-IHUgDJdomv6YtG4p3zl1B5wWf9ffinHIvebqQOmV3U+3SLw4fC+LUCCgwfETkbTtjy5/Qws2VoVf6z/ETQpFpg==
+    dependencies:
+      "@fortawesome/fontawesome-common-types" "^0.2.28"
+  
+  "@fortawesome/react-fontawesome@^0.1.10":
+    version "0.1.10"
+    resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-0.1.10.tgz#7ba2bd300036f95e2ac084000ba8ba26cd269c96"
+    integrity sha512-UGdpJiLBIqR/8xcLrCarf2pChqQFKjDTD02C7ZS/odpOVVl2YuHYRCLEOQ0GpfOk6jtYhmouSFOFoC8qNCe5cg==
+    dependencies:
+      prop-types "^15.7.2"
   
   "@hapi/address@2.x.x":
     version "2.1.4"
@@ -1762,6 +1796,13 @@ Lockfile:
       "@types/minimatch" "*"
       "@types/node" "*"
   
+  "@types/i18next@^13.0.0":
+    version "13.0.0"
+    resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-13.0.0.tgz#403ef338add0104e74d9759f1b39217e7c5d4084"
+    integrity sha512-gp/SIShAuf4WOqi8ey0nuI7qfWaVpMNCcs/xLygrh/QTQIXmlDC1E0TtVejweNW+7SGDY7g0lyxyKZIJuCKIJw==
+    dependencies:
+      i18next "*"
+  
   "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
     version "2.0.2"
     resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.2.tgz#79d7a78bad4219f4c03d6557a1c72d9ca6ba62d5"
@@ -1819,6 +1860,15 @@ Lockfile:
     version "1.5.4"
     resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
     integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
+  
+  "@types/react-datepicker@^2.11.0":
+    version "2.11.0"
+    resolved "https://registry.yarnpkg.com/@types/react-datepicker/-/react-datepicker-2.11.0.tgz#aa6faa66de17b0ff96bc0af9d5d2506d5dd99703"
+    integrity sha512-eagG8BE3TFgPYyZb2/hG4+2delLH9z/4OWzT7wuTCKLHDDXIXgvkb2O2cW8q4/wuqnTnMxo+vl3vgPTENkofzw==
+    dependencies:
+      "@types/react" "*"
+      date-fns "^2.0.1"
+      popper.js "^1.14.1"
   
   "@types/react-dom@*":
     version "16.9.8"
@@ -3201,7 +3251,7 @@ Lockfile:
       isobject "^3.0.0"
       static-extend "^0.1.1"
   
-  classnames@^2.2.3:
+  classnames@^2.2.3, classnames@^2.2.6:
     version "2.2.6"
     resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
     integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -3908,6 +3958,11 @@ Lockfile:
       abab "^2.0.0"
       whatwg-mimetype "^2.2.0"
       whatwg-url "^7.0.0"
+  
+  date-fns@^2.0.1, date-fns@^2.14.0:
+    version "2.14.0"
+    resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.14.0.tgz#359a87a265bb34ef2e38f93ecf63ac453f9bc7ba"
+    integrity sha512-1zD+68jhFgDIM0rF05rcwYO8cExdNqxjq4xP1QKM60Q45mnO6zaMWB4tOzrIr4M4GSLntsKeE4c9Bdl2jhL/yw==
   
   debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
     version "2.6.9"
@@ -5795,6 +5850,13 @@ Lockfile:
     dependencies:
       normalize-url "^1.0.0"
       strip-url-auth "^1.0.0"
+  
+  i18next@*, i18next@^19.4.5:
+    version "19.4.5"
+    resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.4.5.tgz#f9ea8bbb48d1ec66bc3436f0bb74a16b11821e11"
+    integrity sha512-aLvSsURoupi3x9IndmV6+m3IGhzLzhYv7Gw+//K3ovdliyGcFRV0I1MuddI0Bk/zR7BG1U+kJOjeHFUcUIdEgg==
+    dependencies:
+      "@babel/runtime" "^7.3.1"
   
   iconv-lite@0.4.24, iconv-lite@^0.4.24:
     version "0.4.24"
@@ -9473,6 +9535,17 @@ Lockfile:
       regenerator-runtime "^0.13.3"
       whatwg-fetch "^3.0.0"
   
+  react-datepicker@^2.16.0:
+    version "2.16.0"
+    resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-2.16.0.tgz#6bd68de94f5fb38c8f6a4370f3c612837c700e4e"
+    integrity sha512-TvcmSY27rn0JKvuJuIXNNS+niGQNdgtuG/CsBttVYhPOA9KmSw7c2PvQBPVEvzkyV+QPNJ8jN/KVJNj9uvopqA==
+    dependencies:
+      classnames "^2.2.6"
+      date-fns "^2.0.1"
+      prop-types "^15.7.2"
+      react-onclickoutside "^6.9.0"
+      react-popper "^1.3.4"
+  
   react-dev-utils@^10.2.1:
     version "10.2.1"
     resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-10.2.1.tgz#f6de325ae25fa4d546d09df4bb1befdc6dd19c19"
@@ -9535,7 +9608,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
     integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
   
-  react-popper@^1.3.6:
+  react-onclickoutside@^6.9.0:
+    version "6.9.0"
+    resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.9.0.tgz#a54bc317ae8cf6131a5d78acea55a11067f37a1f"
+    integrity sha512-8ltIY3bC7oGhj2nPAvWOGi+xGFybPNhJM0V1H8hY/whNcXgmDeaeoCMPPd8VatrpTsUWjb/vGzrmu6SrXVty3A==
+  
+  react-popper@^1.3.4, react-popper@^1.3.6:
     version "1.3.7"
     resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-1.3.7.tgz#f6a3471362ef1f0d10a4963673789de1baca2324"
     integrity sha512-nmqYTx7QVjCm3WUZLeuOomna138R1luC4EqkW3hxJUrAe+3eNz3oFCLYdnPwILfn0mX1Ew2c3wctrjlUMYYUww==
